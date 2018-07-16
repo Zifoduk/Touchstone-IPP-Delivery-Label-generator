@@ -173,7 +173,7 @@ namespace TS_Post_Database_Inserter
         internal void LaunchMethod()
         {
             CustInfo Cust = new CustInfo(this);
-            Cust.ShowDialog();
+            Cust.ShowDialog();            
         }
 
         private void Start_FormClosing(object sender, FormClosingEventArgs e)
