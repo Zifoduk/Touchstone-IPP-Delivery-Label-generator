@@ -34,16 +34,10 @@ namespace TS_Post_Database_Inserter
             //Config.AppSettings.Settings["OpenPDF"].Value = "";
 
             //File Settings location
-            Console.WriteLine("emps");
             MasterExcel = Config.AppSettings.Settings["MasterExcel"].Value;
             MainExcel = Config.AppSettings.Settings["MainExcel"].Value;
             OpenPDF = Config.AppSettings.Settings["OpenPDF"].Value;
-
-            Console.WriteLine(Config.AppSettings.Settings["MainExcel"].Value + "  + " + MasterExcel);
-            Console.WriteLine(Config.AppSettings.Settings["MainExcel"].Value + "  + " + MainExcel);
-            Console.WriteLine(Config.AppSettings.Settings["OpenPDF"].Value + "  + " + OpenPDF);
-            Console.WriteLine("emps");
-
+            
             if (MasterExcel == "")
             {
                 ElL.Text = "Select a Master Excel document!!";
@@ -81,11 +75,6 @@ namespace TS_Post_Database_Inserter
             }
         }
 
-        private void Main(string[] args)
-        {
-            Console.WriteLine("active main");
-        }
-
         private void OpenEF_Click(object sender, EventArgs e)
         {
             OpenFileDialog File = openFileDialog1;
@@ -97,7 +86,6 @@ namespace TS_Post_Database_Inserter
                     MECheck mec = new MECheck(this, File.FileName, 1);
                     mec.ShowDialog();
                     Config.AppSettings.Settings["MainExcel"].Value = MainExcel;
-                    Console.WriteLine(Config.AppSettings.Settings["MainExcel"].Value);
                     Config.Save(ConfigurationSaveMode.Full);
                 }
                 else
@@ -107,7 +95,6 @@ namespace TS_Post_Database_Inserter
                     PHExcelL.ForeColor = Color.Black;
                     MEC mec = new MEC(1);
                     Config.AppSettings.Settings["MainExcel"].Value = MainExcel;
-                    Console.WriteLine(Config.AppSettings.Settings["MainExcel"].Value);
                     mec.ShowDialog();
                 }
             }
@@ -124,7 +111,6 @@ namespace TS_Post_Database_Inserter
                     MECheck mec = new MECheck(this, File.FileName, 0);
                     mec.ShowDialog();
                     Config.AppSettings.Settings["MasterExcel"].Value = MasterExcel;
-                    Console.WriteLine(Config.AppSettings.Settings["MasterExcel"].Value);
                     Config.Save(ConfigurationSaveMode.Full);
                 }
                 else
@@ -134,7 +120,6 @@ namespace TS_Post_Database_Inserter
                     ElL.ForeColor = Color.Black;
                     MEC mec = new MEC(0);
                     Config.AppSettings.Settings["MasterExcel"].Value = MasterExcel;
-                    Console.WriteLine(Config.AppSettings.Settings["MasterExcel"].Value);
                     mec.ShowDialog();
                 }
             }
@@ -150,7 +135,6 @@ namespace TS_Post_Database_Inserter
                 LpdfL.Text = File.FileName;
                 LpdfL.ForeColor = Color.Black;
                 Config.AppSettings.Settings["OpenPDF"].Value = OpenPDF;
-                Console.WriteLine(Config.AppSettings.Settings["OpenPDF"].Value);
                 Config.Save(ConfigurationSaveMode.Full);
                 reader = new PdfReader(File.FileName);
                 PDFL.Text = ("Number of Labels found: " + reader.NumberOfPages);
@@ -195,6 +179,7 @@ namespace TS_Post_Database_Inserter
         private void Start_FormClosing(object sender, FormClosingEventArgs e)
         {
             Config.Save(ConfigurationSaveMode.Full);
+            
         }
     }
 }

@@ -25,9 +25,15 @@ namespace TS_Post_Database_Inserter
         int MaxPg;
         int CurrentPg;
 
+        //g = currentpage - 1
+        public int g = 0;
+
+
+
         PdfReader reader;
         List<Pages> ResPages = new List<Pages>();
         List<CheckBox> CB = new List<CheckBox>();
+
         public CustInfo()
         {
             InitializeComponent();
@@ -43,8 +49,6 @@ namespace TS_Post_Database_Inserter
                 if (c.CheckState == CheckState.Unchecked)
                     c.BackColor = Color.Red;
             }
-
-            Console.WriteLine("count:  = " + CB.Count);
 
             OpenPDF = Config.AppSettings.Settings["OpenPDF"].Value;
 
@@ -66,7 +70,6 @@ namespace TS_Post_Database_Inserter
             foreach (string o in ResPages[CurrentPg].ResultArr)
             {
                 v++;
-                Console.WriteLine("Line" + v +": " + o);
             }
 
             //////Name
@@ -81,7 +84,6 @@ namespace TS_Post_Database_Inserter
                 }
 
                 p.Name = tArr[x];
-                Console.WriteLine("name = " + p.Name);
             }
 
             //////Address
@@ -106,7 +108,6 @@ namespace TS_Post_Database_Inserter
                     tempAdArry.Add(tArr[i]);
                 }
                 p.Address = string.Join(",\n", tempAdArry.ToArray());
-                Console.WriteLine("address = " + p.Address);
             }
 
             ////////Barcode
@@ -121,7 +122,6 @@ namespace TS_Post_Database_Inserter
                 }
 
                 p.Barcode = tArr[x];
-                Console.WriteLine("Barcode = " + p.Barcode);
             }
 
             ////////Delivery Date
@@ -138,7 +138,6 @@ namespace TS_Post_Database_Inserter
                 }
 
                 p.DelDate = tArr[x];
-                Console.WriteLine("Del Date = " + p.DelDate);
             }
 
             ////////Consignment Number
@@ -155,7 +154,6 @@ namespace TS_Post_Database_Inserter
                 }
 
                 p.ConNumb = tArr[x];
-                Console.WriteLine("Consignment Number = " + p.ConNumb);
             }
 
             ////////PostCode
@@ -172,7 +170,6 @@ namespace TS_Post_Database_Inserter
                 }
 
                 p.PostCode = tArr[x];
-                Console.WriteLine("PostCode = " + p.PostCode);
             }
 
             ////////Tel
@@ -189,7 +186,6 @@ namespace TS_Post_Database_Inserter
                 }
 
                 p.Tel = tArr[x];
-                Console.WriteLine("Telephone = " + p.Tel);
             }
 
             ////////Location
@@ -199,7 +195,6 @@ namespace TS_Post_Database_Inserter
                 string[] tArr = p.ResultArr;
                 x = tArr.Length - 2;
                 p.Locat = tArr[x];
-                Console.WriteLine("Location = " + p.Locat);
             }
 
             ////////Location Number
@@ -209,7 +204,6 @@ namespace TS_Post_Database_Inserter
                 string[] tArr = p.ResultArr;
                 x = tArr.Length - 1;
                 p.LocatNo = tArr[x];
-                Console.WriteLine("Location Number = " + p.LocatNo);
             }
 
             ////////Parcle Number
@@ -225,12 +219,180 @@ namespace TS_Post_Database_Inserter
                     }
                 }
                 p.ParceNum = tArr[x];
-                Console.WriteLine("Parcel number = " + p.ParceNum);
             }
 
-            InfoUpdate(true);
+            InfoUpdate(ChangePage.Start);
+        }
+        
 
-            Console.WriteLine("End");
+        public void InfoUpdate(ChangePage n)
+        {
+            Console.WriteLine("NEW PAGE  ");
+            Console.WriteLine("");
+
+            //start
+            if(n == ChangePage.Start)
+            {
+                CurrentPg++;
+                g = CurrentPg - 1;
+
+                foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
+                    ResPages[g].CheckStates.Add(c.CheckState);
+                
+                Console.WriteLine(ResPages[g].checkboxes.Count);
+                ResPages[g].viewed = true;               
+
+                NameTB.Text = ResPages[g].Name;
+                tabControl1.SelectedTab.Text = (NameTB.Text + ", PDF page:" + CurrentPg);
+                PgNumL.Text = ("Page: " + CurrentPg);
+                AddressTB.Text = ResPages[g].Address;
+                BarTB.Text = ResPages[g].Barcode;
+                DelTB.Text = ResPages[g].DelDate;
+                ConTB.Text = ResPages[g].ConNumb;
+                PostTB.Text = ResPages[g].PostCode;
+                TelTB.Text = ResPages[g].Tel;
+                LocatTB.Text = ResPages[g].Locat;
+                LocatNoTB.Text = ResPages[g].LocatNo;
+                ParcelTB.Text = ResPages[g].ParceNum;
+
+                if (CurrentPg == MaxPg)
+                    Continue.Text = "Finish";
+
+                return;
+            }
+            
+            //Change page to next page
+            if (n == ChangePage.Next)
+            {
+
+                //foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
+                for (int i = 0; i < tabControl1.SelectedTab.Controls.OfType<CheckBox>().Count(); i++)
+                {
+                    foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
+                        ResPages[g].CheckStates[i] = CheckState.Indeterminate;
+                }
+
+                ResPages[g].viewed = true;
+
+                if (CurrentPg < MaxPg)
+                {
+                    CurrentPg++;
+                    g++;
+
+                    if (ResPages[g].viewed)
+                    {
+                            /*if (c.CheckState == CheckState.Unchecked)
+                                c.BackColor = Color.Red;
+                            else if (c.CheckState == CheckState.Checked)
+                                c.BackColor = Color.Transparent;*/
+                    }
+                    else if(!ResPages[g].viewed)
+                    {
+
+                    }
+
+                    //textfields
+                    NameTB.Text = ResPages[g].Name;
+                    tabControl1.SelectedTab.Text = (NameTB.Text + ", PDF page:" + CurrentPg);
+                    PgNumL.Text = ("Page: " + CurrentPg);
+                    AddressTB.Text = ResPages[g].Address;
+                    BarTB.Text = ResPages[g].Barcode;
+                    DelTB.Text = ResPages[g].DelDate;
+                    ConTB.Text = ResPages[g].ConNumb;
+                    PostTB.Text = ResPages[g].PostCode;
+                    TelTB.Text = ResPages[g].Tel;
+                    LocatTB.Text = ResPages[g].Locat;
+                    LocatNoTB.Text = ResPages[g].LocatNo;
+                    ParcelTB.Text = ResPages[g].ParceNum;
+
+                    //end
+                    if(CurrentPg > 1)
+                    {
+                        PrevBtn.Enabled = true;
+                    }
+
+                    if (CurrentPg == MaxPg)
+                        Continue.Text = "Finish";
+                }
+                else if (CurrentPg == MaxPg)
+                {
+                    //end
+                }
+            }
+
+            //Change page to previous page
+            if (n == ChangePage.Previous)
+            {
+                ResPages[g].viewed = true;
+
+                CurrentPg--;
+                g = CurrentPg - 1;
+
+                /*for (int i = 0; i < tabControl1.SelectedTab.Controls.OfType<CheckBox>().Count(); i++)
+                {
+                    Console.WriteLine(i);
+                    foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
+                        c.CheckState = ResPages[g].CheckStates[i];
+                }*/
+
+                if (ResPages[g].viewed)
+                {
+                    //set Checkboxes
+                        /*if (c.CheckState == CheckState.Unchecked)
+                            c.BackColor = Color.Red;
+                        else if (c.CheckState == CheckState.Checked)
+                            c.BackColor = Color.Transparent;*/
+                }
+                else
+                {
+
+                }
+
+                if (CurrentPg + 1 > 1)
+                {
+                    if (CurrentPg + 1 == MaxPg)
+                        Continue.Text = "Next";
+
+                    NameTB.Text = ResPages[g].Name;
+                    tabControl1.SelectedTab.Text = (NameTB.Text + ", PDF page:" + CurrentPg);
+                    PgNumL.Text = ("Page: " + CurrentPg);
+                    AddressTB.Text = ResPages[g].Address;
+                    BarTB.Text = ResPages[g].Barcode;
+                    DelTB.Text = ResPages[g].DelDate;
+                    ConTB.Text = ResPages[g].ConNumb;
+                    PostTB.Text = ResPages[g].PostCode;
+                    TelTB.Text = ResPages[g].Tel;
+                    LocatTB.Text = ResPages[g].Locat;
+                    LocatNoTB.Text = ResPages[g].LocatNo;
+                    ParcelTB.Text = ResPages[g].ParceNum;
+
+                    if (CurrentPg == 1)
+                    {
+                        PrevBtn.Enabled = false;
+                    }
+
+                }
+            }
+
+        }
+
+
+        private void Continue_Click(object sender, EventArgs e)
+        {
+            InfoUpdate(ChangePage.Next);
+        }
+
+        private void PrevBtn_Click(object sender, EventArgs e)
+        {
+            if(CurrentPg > 1)
+            {
+                InfoUpdate(ChangePage.Previous);
+            }
+        }
+        
+        private void Cancel_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void C_CheckStateChanged(object sender, EventArgs e)
@@ -245,129 +407,42 @@ namespace TS_Post_Database_Inserter
                 t.BackColor = Color.Transparent;
             else if (t.BackColor == Color.Transparent)
                 t.BackColor = Color.Red;
-        }
 
-        public void InfoUpdate(bool more)
-        {
-            int g;
-            if (!more)
-            {
-                if (CurrentPg > 1)
-                {
-                    if (CurrentPg == MaxPg)
-                        Continue.Text = "Next";
-                    CurrentPg--;
-                    Console.WriteLine(CurrentPg);
-                    g = CurrentPg - 1;
-                    NameTB.Text = ResPages[g].Name;
-                    tabControl1.SelectedTab.Text = (NameTB.Text + ", PDF page:" + CurrentPg);
-                    PgNumL.Text = ("Page: " + CurrentPg);
-                    AddressTB.Text = ResPages[g].Address;
-                    BarTB.Text = ResPages[g].Barcode;
-                    DelTB.Text = ResPages[g].DelDate;
-                    ConTB.Text = ResPages[g].ConNumb;
-                    PostTB.Text = ResPages[g].PostCode;
-                    TelTB.Text = ResPages[g].Tel;
-                    LocatTB.Text = ResPages[g].Locat;
-                    LocatNoTB.Text = ResPages[g].LocatNo;
-                    ParcelTB.Text = ResPages[g].ParceNum;
-                    if (CurrentPg == 1)
-                    {
-                        PrevBtn.Enabled = false;
-                    }
-                }
+            int y = 0;
+            foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
+            {/*
+                if (c == t)
+                    ResPages[g]
+                y++;*/
             }
-            else
-            {
-                if (CurrentPg < MaxPg)
-                {
-                    CurrentPg++;
-                    Console.WriteLine(CurrentPg);
-                    g = CurrentPg - 1;
-                    NameTB.Text = ResPages[g].Name;
-                    tabControl1.SelectedTab.Text = (NameTB.Text + ", PDF page:" + CurrentPg);
-                    PgNumL.Text = ("Page: " + CurrentPg);
-                    AddressTB.Text = ResPages[g].Address;
-                    BarTB.Text = ResPages[g].Barcode;
-                    DelTB.Text = ResPages[g].DelDate;
-                    ConTB.Text = ResPages[g].ConNumb;
-                    PostTB.Text = ResPages[g].PostCode;
-                    TelTB.Text = ResPages[g].Tel;
-                    LocatTB.Text = ResPages[g].Locat;
-                    LocatNoTB.Text = ResPages[g].LocatNo;
-                    ParcelTB.Text = ResPages[g].ParceNum;
-                    if(CurrentPg > 1)
-                    {
-                        PrevBtn.Enabled = true;
-                    }
-                    if (CurrentPg == MaxPg)
-                        Continue.Text = "Finish";
-                }
-            }
-        }
 
-        public class Pages
-        {
-            public string PDFtext { get; set; }
-            public string[] ResultArr { get; set; }
-            public string Name { get; set; }
-            public string Address { get; set; }
-            public string Barcode { get; set; }
-            public string DelDate { get; set; }
-            public string ConNumb { get; set; }
-            public string PostCode { get; set; }
-            public string Tel { get; set; }
-            public string Locat { get; set; }
-            public string LocatNo { get; set; }
-            public string ParceNum { get; set; }
         }
+    }
 
-        private void Cancel_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
+    public class Pages
+    {
+        public string PDFtext { get; set; }
+        public string[] ResultArr { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Barcode { get; set; }
+        public string DelDate { get; set; }
+        public string ConNumb { get; set; }
+        public string PostCode { get; set; }
+        public string Tel { get; set; }
+        public string Locat { get; set; }
+        public string LocatNo { get; set; }
+        public string ParceNum { get; set; }
+        public List<CheckBox> checkboxes = new List<CheckBox>();
+        public List<CheckState> CheckStates = new List<CheckState>();
+        public bool viewed { get; set; }
+    }
 
-        private void Continue_Click(object sender, EventArgs e)
-        {
-            int i = 0;
-            foreach (CheckBox l in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
-            {
-                if (l.Checked == false)
-                {
-                    l.BackColor = Color.Red;
-                    i++;
-                }
-                    
-            }
-            if (i > 0)
-            {
-                CHKINFO CI = new CHKINFO();
-                CI.ShowDialog();
-            }
-            else
-            {
-                if (CurrentPg < MaxPg)
-                {
-                    InfoUpdate(true);
-                    foreach (CheckBox l in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
-                    {
-                        l.CheckState = CheckState.Unchecked;
-                         l.BackColor = Color.Red;
-                    }
-                }
-                else if (CurrentPg == MaxPg)
-                {
-                    //end
-                }
-            }
-        }
 
-        private void PrevBtn_Click(object sender, EventArgs e)
-        {
-            if(CurrentPg > 1)
-            {
-                InfoUpdate(false);
-            }
-        }
+    public enum ChangePage
+    {
+        Start,
+        Next,
+        Previous,
     }
 }
