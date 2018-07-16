@@ -236,6 +236,7 @@ namespace TS_Post_Database_Inserter
                 CurrentPg++;
                 g = CurrentPg - 1;
 
+                Console.WriteLine(g);
                 foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
                     ResPages[g].CheckStates.Add(c.CheckState);
                 
@@ -266,10 +267,11 @@ namespace TS_Post_Database_Inserter
             {
 
                 //foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
-                for (int i = 0; i < tabControl1.SelectedTab.Controls.OfType<CheckBox>().Count(); i++)
+                int i = 0;
+                foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
                 {
-                    foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
-                        ResPages[g].CheckStates[i] = CheckState.Indeterminate;
+                    ResPages[g].CheckStates[i] = c.CheckState;
+                    i++;
                 }
 
                 ResPages[g].viewed = true;
@@ -281,14 +283,20 @@ namespace TS_Post_Database_Inserter
 
                     if (ResPages[g].viewed)
                     {
-                            /*if (c.CheckState == CheckState.Unchecked)
-                                c.BackColor = Color.Red;
-                            else if (c.CheckState == CheckState.Checked)
-                                c.BackColor = Color.Transparent;*/
+                        int u = 0;
+                        foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
+                        {
+                            c.CheckState = ResPages[g].CheckStates[u];
+                            u++;
+                        }
                     }
                     else if(!ResPages[g].viewed)
                     {
-
+                        foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
+                        {
+                            c.CheckState = CheckState.Unchecked;
+                            ResPages[g].CheckStates.Add(c.CheckState);
+                        }
                     }
 
                     //textfields
@@ -316,13 +324,39 @@ namespace TS_Post_Database_Inserter
                 }
                 else if (CurrentPg == MaxPg)
                 {
-                    //end
+                    List<CheckState> s = new List<CheckState>();
+                    int w = 0;
+                    int q = ResPages.Count();
+                    for (int t = 0; t < q; t++) 
+                        foreach (CheckState c in ResPages[t].CheckStates)                        
+                            if (c == CheckState.Unchecked)
+                                w++;
+                    
+                    if(w > 0)
+                    {
+                        CHKINFO CI = new CHKINFO();
+                        CI.ShowDialog();
+                    }
+                    else if(w==0)
+                    {
+                        //end
+                        Console.WriteLine("end here");
+                        Console.WriteLine("");
+                    }
                 }
             }
 
             //Change page to previous page
             if (n == ChangePage.Previous)
             {
+                Console.WriteLine(g);
+                int i = 0;
+                foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
+                {
+                    ResPages[g].CheckStates[i] = c.CheckState;
+                    i++;
+                }
+
                 ResPages[g].viewed = true;
 
                 CurrentPg--;
@@ -337,15 +371,17 @@ namespace TS_Post_Database_Inserter
 
                 if (ResPages[g].viewed)
                 {
-                    //set Checkboxes
-                        /*if (c.CheckState == CheckState.Unchecked)
-                            c.BackColor = Color.Red;
-                        else if (c.CheckState == CheckState.Checked)
-                            c.BackColor = Color.Transparent;*/
+                    int u = 0;
+                    foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
+                    {
+                        c.CheckState = ResPages[g].CheckStates[u];
+                        u++;
+                    }
                 }
-                else
+                else if (!ResPages[g].viewed)
                 {
-
+                    foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
+                        ResPages[g].CheckStates.Add(c.CheckState);
                 }
 
                 if (CurrentPg + 1 > 1)
