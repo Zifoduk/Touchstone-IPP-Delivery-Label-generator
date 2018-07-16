@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
-using MVSTA = Microsoft.VisualStudio.Tools.Applications;
 using iTextSharp.text.pdf.parser;
 using iTextSharp.text.pdf;
 using iTextSharp.text;

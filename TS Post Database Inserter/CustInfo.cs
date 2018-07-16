@@ -13,8 +13,6 @@ using System.Reflection;
 using iTextSharp.text.pdf.parser;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
-using Excel = Microsoft.Office.Interop.Excel;
-using MVSTA = Microsoft.VisualStudio.Tools.Applications;
 using NPOI.XSSF.UserModel;
 using NPOI.XSSF.Model;
 using NPOI.SS.UserModel;
@@ -478,84 +476,85 @@ namespace TS_Post_Database_Inserter
             //Console.WriteLine(WS.column);
 
 
-            /*Excel.Application excel = new Excel.Application();
-            Excel.Workbook sheet = excel.Workbooks.Open(st.MainExcel);
-            Excel.Worksheet x = excel.ActiveSheet as Excel.Worksheet;*/
-            
-            //Excel.Range uR = x.UsedRange
-            int cR = WS.PhysicalNumberOfRows;
-            int cC = WS.GetRow(WS.FirstRowNum).LastCellNum;
-            int aR = 0;
+            /*
+int cR = WS.PhysicalNumberOfRows;
+int cC = WS.GetRow(WS.FirstRowNum).LastCellNum;
+int aR = 0;
 
-            //int aC = 1;
-            /*for (int i = 0 ; i < ResPages.Count; i++)
-            {
-                aR = cR + i + 1;
-                Console.WriteLine("i = " + i);
-                Console.WriteLine("ar = " + aR);
-                Console.WriteLine("cr = " + cR);
-                
-                foreach (Pages p in ResPages)
-                {
-                    List<string> vs = new List<string>();
-                    List<string> vp = new List<string>();
-                    List<PropertyInfo> pi = new List<PropertyInfo>();
-                    foreach (var prop in p.GetType().GetProperties())
-                    {
-                        if (prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
-                        {
-                            vs.Add(prop.GetValue(p, null).ToString());
-                            vp.Add(prop.Name.ToString());
-                            pi.Add(prop);
-                        }
-                    }
-                    foreach (PropertyInfo S in pi)                        
-                    {
-                        for(int y = 0; y < cC; y++)
-                        {   
-                            if (S.Name == WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue)
-                            {
-                                Console.WriteLine("TOP: " + WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue + ", aR: " + aR + ", Y: " + y);
-                                Console.WriteLine(S.GetValue(p, null).ToString());
-                                WS.CreateRow(aR);
-                                WS.GetRow(aR).CreateCell(y);
-                                WS.GetRow(aR).GetCell(y).SetCellValue(S.GetValue(p, null).ToString());
-                                Console.WriteLine("Check: " + WS.GetRow(aR).GetCell(y).StringCellValue);
-                                Console.WriteLine("");
-                            }
-                        }
-                    }
-                }
-            }*/
+//int aC = 1;
+for (int i = 0 ; i < ResPages.Count; i++)
+{
+    aR = cR + i + 1;
+    Console.WriteLine("i = " + i);
+    Console.WriteLine("ar = " + aR);
+    Console.WriteLine("cr = " + cR);
 
-            aR = 3;
-            List<string> vs = new List<string>();
-            List<string> vp = new List<string>();
-            List<PropertyInfo> pi = new List<PropertyInfo>();
-            foreach (var prop in ResPages[0].GetType().GetProperties())
+    foreach (Pages p in ResPages)
+    {
+        List<string> vs = new List<string>();
+        List<string> vp = new List<string>();
+        List<PropertyInfo> pi = new List<PropertyInfo>();
+        foreach (var prop in p.GetType().GetProperties())
+        {
+            if (prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
             {
-                if (prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
+                vs.Add(prop.GetValue(p, null).ToString());
+                vp.Add(prop.Name.ToString());
+                pi.Add(prop);
+            }
+        }
+        foreach (PropertyInfo S in pi)                        
+        {
+            for(int y = 0; y < cC; y++)
+            {   
+                if (S.Name == WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue)
                 {
-                    vs.Add(prop.GetValue(ResPages[0], null).ToString());
-                    vp.Add(prop.Name.ToString());
-                    pi.Add(prop);
+                    Console.WriteLine("TOP: " + WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue + ", aR: " + aR + ", Y: " + y);
+                    Console.WriteLine(S.GetValue(p, null).ToString());
+                    WS.CreateRow(aR);
+                    WS.GetRow(aR).CreateCell(y);
+                    WS.GetRow(aR).GetCell(y).SetCellValue(S.GetValue(p, null).ToString());
+                    Console.WriteLine("Check: " + WS.GetRow(aR).GetCell(y).StringCellValue);
+                    Console.WriteLine("");
                 }
             }
-            foreach (PropertyInfo S in pi)
+        }
+    }
+}   */
+
+
+
+            int CountRow = WS.PhysicalNumberOfRows;
+            int MaxColumns = WS.GetRow(0).LastCellNum;
+
+            int i = 1;
+            int NRow;
+            foreach(Pages p in ResPages)
             {
-                for (int y = 0; y < cC; y++)
+                NRow = i + CountRow;
+                List<PropertyInfo> Pi = new List<PropertyInfo>();
+                if (i <+ ResPages.Count)
                 {
-                    if (S.Name == WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue)
+                    foreach(var prop in p.GetType().GetProperties())
                     {
-                        Console.WriteLine("TOP: " + WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue + ", aR: " + aR + ", Y: " + y);
-                        Console.WriteLine(S.GetValue(ResPages[0], null).ToString());
-                        WS.CreateRow(aR);
-                        WS.GetRow(aR).CreateCell(y);
-                        WS.GetRow(aR).GetCell(y).SetCellValue(S.GetValue(ResPages[0], null).ToString());
-                        Console.WriteLine("Check: " + WS.GetRow(aR).GetCell(y).StringCellValue);
-                        Console.WriteLine("");
+                        if(prop.GetType() == typeof(string) && prop.Name != "PDFtext")
+                        {
+                            Pi.Add(prop);
+                        }
                     }
                 }
+                int c = 0;
+                foreach(PropertyInfo S in Pi)
+                {
+                    if(WS.GetRow(WS.FirstRowNum).GetCell(c).StringCellValue == S.Name)
+                    {
+                        WS.CreateRow(NRow);
+                        WS.GetRow(NRow).CreateCell(c);
+                        WS.GetRow(NRow).GetCell(c).SetCellValue(S.GetValue(Pi, null).ToString());
+                    }
+                    c++;
+                }
+                i++;
             }
 
             using (var rs = new FileStream(st.MainExcel, FileMode.Create, FileAccess.Write))
@@ -563,9 +562,6 @@ namespace TS_Post_Database_Inserter
                 WB.Write(rs);
                 rs.Close();
             }
-            //sheet.Close(true, Type.Missing, Type.Missing);
-            //excel.Quit();
-            //x.Cells
         }
 
         private void CustInfo_FormClosing(object sender, FormClosingEventArgs e)
