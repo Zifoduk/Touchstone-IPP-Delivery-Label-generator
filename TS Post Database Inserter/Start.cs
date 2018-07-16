@@ -172,7 +172,7 @@ namespace TS_Post_Database_Inserter
 
         internal void LaunchMethod()
         {
-            CustInfo Cust = new CustInfo();
+            CustInfo Cust = new CustInfo(this);
             Cust.ShowDialog();
         }
 

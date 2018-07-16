@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using System.Windows.Forms;
+using System.Reflection;
 using iTextSharp.text.pdf.parser;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
@@ -28,16 +29,18 @@ namespace TS_Post_Database_Inserter
         //g = currentpage - 1
         public int g = 0;
 
-
-
+        Start st;
         PdfReader reader;
         List<Pages> ResPages = new List<Pages>();
         List<CheckBox> CB = new List<CheckBox>();
 
-        public CustInfo()
-        {
-            InitializeComponent();
 
+        public CustInfo(Start f)
+        {
+
+            InitializeComponent();
+            st = f;
+            
             foreach(Control C in tabControl1.SelectedTab.Controls)
             { 
                 if(C is CheckBox)
@@ -227,8 +230,6 @@ namespace TS_Post_Database_Inserter
 
         public void InfoUpdate(ChangePage n)
         {
-            Console.WriteLine("NEW PAGE  ");
-            Console.WriteLine("");
 
             //start
             if(n == ChangePage.Start)
@@ -236,11 +237,9 @@ namespace TS_Post_Database_Inserter
                 CurrentPg++;
                 g = CurrentPg - 1;
 
-                Console.WriteLine(g);
                 foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
                     ResPages[g].CheckStates.Add(c.CheckState);
                 
-                Console.WriteLine(ResPages[g].checkboxes.Count);
                 ResPages[g].viewed = true;               
 
                 NameTB.Text = ResPages[g].Name;
@@ -339,9 +338,7 @@ namespace TS_Post_Database_Inserter
                     }
                     else if(w==0)
                     {
-                        //end
-                        Console.WriteLine("end here");
-                        Console.WriteLine("");
+                        PushExcel();
                     }
                 }
             }
@@ -349,7 +346,6 @@ namespace TS_Post_Database_Inserter
             //Change page to previous page
             if (n == ChangePage.Previous)
             {
-                Console.WriteLine(g);
                 int i = 0;
                 foreach (CheckBox c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
                 {
@@ -453,6 +449,35 @@ namespace TS_Post_Database_Inserter
             }
 
         }
+
+
+        void PushExcel()
+        {
+            
+            /*Excel.Application excel = new Excel.Application();
+            //Excel.Workbook sheet = excel.Workbooks.Open(st.MainExcel);
+            Excel.Worksheet x = excel.ActiveSheet as Excel.Worksheet;
+            
+            Excel.Range uR = x.UsedRange;
+            int cR = uR.Rows.Count;
+            int cC = uR.Columns.Count;
+            int aR = cR + 1;*/
+            for(int i = 0 ; i < ResPages.Count; i++)
+            {
+                Console.WriteLine("i = " + i);
+                foreach (Pages p in ResPages)
+                {
+                    foreach (var prop in p.GetType().GetProperties())
+                    {
+                        if (prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
+                            Console.WriteLine(prop.Name + ", " + prop.GetValue(p, null));
+                    }
+                }
+                //aR++;
+            }
+            //x.Cells
+        }
+
     }
 
     public class Pages
@@ -469,7 +494,6 @@ namespace TS_Post_Database_Inserter
         public string Locat { get; set; }
         public string LocatNo { get; set; }
         public string ParceNum { get; set; }
-        public List<CheckBox> checkboxes = new List<CheckBox>();
         public List<CheckState> CheckStates = new List<CheckState>();
         public bool viewed { get; set; }
     }
