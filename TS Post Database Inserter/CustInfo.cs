@@ -17,9 +17,27 @@ using NPOI.XSSF.UserModel;
 using NPOI.XSSF.Model;
 using NPOI.SS.UserModel;
 using NPOI.SS.Util;
+using NLog;
+using PostSharp.Aspects;
 
 namespace TS_Post_Database_Inserter
 {
+    [Serializable]
+    class ExceptionWrapper : OnExceptionAspect
+    {
+        public override void OnException(MethodExecutionArgs args)
+        {
+            Exception ex = args.Exception;
+            base.OnException(args);
+            Console.WriteLine(ex);
+            Logger logger = LogManager.GetCurrentClassLogger();
+            logger.ErrorException("check error", ex);
+            Console.WriteLine("check code"); 
+        }
+    }
+
+
+    [ExceptionWrapper]
     public partial class CustInfo : Form
     {
         Configuration Config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -42,6 +60,19 @@ namespace TS_Post_Database_Inserter
 
         public CustInfo(Start f)
         {
+            try
+            {
+                int zero = 0;
+                int res = 5 / zero;
+            }
+            catch (DivideByZeroException ex)
+            {
+                Console.WriteLine("issue");
+                throw;
+                // show error dialoge                
+            }
+            Console.WriteLine("error passed");
+
             InitializeComponent();
             st = f;
 
@@ -462,101 +493,119 @@ namespace TS_Post_Database_Inserter
             try
             {
                 fs = new FileStream(st.MainExcel, FileMode.Open, FileAccess.ReadWrite);
+                WB = new XSSFWorkbook(fs);
+                WS = WB.GetSheetAt(0) as XSSFSheet;
             }
-            catch (Exception)
+            catch (ArgumentNullException ex)
             {
-                // show error dialoge
-                throw;
+                Console.WriteLine(ex);
+                Logger logger = LogManager.GetCurrentClassLogger();
+                logger.Error("lol excel error", ex);
+                // show error dialoge                
             }
-
-            WB = new XSSFWorkbook(fs);
-            WS = WB.GetSheetAt(0) as XSSFSheet;
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+            Console.WriteLine("error passed");
 
             //Console.WriteLine(WS.PhysicalNumberOfRows);
             //Console.WriteLine(WS.column);
 
 
             /*
-int cR = WS.PhysicalNumberOfRows;
-int cC = WS.GetRow(WS.FirstRowNum).LastCellNum;
-int aR = 0;
+            int cR = WS.PhysicalNumberOfRows;
+            int cC = WS.GetRow(WS.FirstRowNum).LastCellNum;
+            int aR = 0;
 
-//int aC = 1;
-for (int i = 0 ; i < ResPages.Count; i++)
-{
-    aR = cR + i + 1;
-    Console.WriteLine("i = " + i);
-    Console.WriteLine("ar = " + aR);
-    Console.WriteLine("cr = " + cR);
-
-    foreach (Pages p in ResPages)
-    {
-        List<string> vs = new List<string>();
-        List<string> vp = new List<string>();
-        List<PropertyInfo> pi = new List<PropertyInfo>();
-        foreach (var prop in p.GetType().GetProperties())
-        {
-            if (prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
+            //int aC = 1;
+            for (int i = 0 ; i < ResPages.Count; i++)
             {
-                vs.Add(prop.GetValue(p, null).ToString());
-                vp.Add(prop.Name.ToString());
-                pi.Add(prop);
-            }
-        }
-        foreach (PropertyInfo S in pi)                        
-        {
-            for(int y = 0; y < cC; y++)
-            {   
-                if (S.Name == WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue)
+                aR = cR + i + 1;
+                Console.WriteLine("i = " + i);
+                Console.WriteLine("ar = " + aR);
+                Console.WriteLine("cr = " + cR);
+
+                foreach (Pages p in ResPages)
                 {
-                    Console.WriteLine("TOP: " + WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue + ", aR: " + aR + ", Y: " + y);
-                    Console.WriteLine(S.GetValue(p, null).ToString());
+                    List<string> vs = new List<string>();
+                    List<string> vp = new List<string>();
+                    List<PropertyInfo> pi = new List<PropertyInfo>();
+                    foreach (var prop in p.GetType().GetProperties())
+                    {
+                        if (prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
+                        {
+                            vs.Add(prop.GetValue(p, null).ToString());
+                            vp.Add(prop.Name.ToString());
+                            pi.Add(prop);
+                        }
+                    }
+
                     WS.CreateRow(aR);
-                    WS.GetRow(aR).CreateCell(y);
-                    WS.GetRow(aR).GetCell(y).SetCellValue(S.GetValue(p, null).ToString());
-                    Console.WriteLine("Check: " + WS.GetRow(aR).GetCell(y).StringCellValue);
-                    Console.WriteLine("");
+                    foreach (PropertyInfo S in pi)                        
+                    {
+                        for(int y = 0; y < cC; y++)
+                        {   
+                            if (S.Name == WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue)
+                            {
+                                Console.WriteLine("TOP: " + WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue + ", aR: " + aR + ", Y: " + y);
+                                Console.WriteLine(S.GetValue(p, null).ToString());
+                                WS.GetRow(aR).CreateCell(y);
+                                WS.GetRow(aR).GetCell(y).SetCellValue(S.GetValue(p, null).ToString());
+                                Console.WriteLine("Check: " + WS.GetRow(aR).GetCell(y).StringCellValue);
+                                Console.WriteLine("");
+                            }
+                        }
+                    }
                 }
-            }
-        }
-    }
-}   */
-
-
+            }   */
 
             int CountRow = WS.PhysicalNumberOfRows;
-            int MaxColumns = WS.GetRow(0).LastCellNum;
-
-            int i = 1;
+            Console.WriteLine("CR: " + CountRow);
+            int i = 0;
             int NRow;
             foreach(Pages p in ResPages)
             {
                 NRow = i + CountRow;
+                WS.CreateRow(NRow);
                 List<PropertyInfo> Pi = new List<PropertyInfo>();
-                if (i <+ ResPages.Count)
+                Console.WriteLine(NRow);
+                if (i < ResPages.Count)
                 {
                     foreach(var prop in p.GetType().GetProperties())
                     {
-                        if(prop.GetType() == typeof(string) && prop.Name != "PDFtext")
+                        if(prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
                         {
                             Pi.Add(prop);
                         }
                     }
                 }
+
                 int c = 0;
                 foreach(PropertyInfo S in Pi)
                 {
                     if(WS.GetRow(WS.FirstRowNum).GetCell(c).StringCellValue == S.Name)
                     {
-                        WS.CreateRow(NRow);
                         WS.GetRow(NRow).CreateCell(c);
-                        WS.GetRow(NRow).GetCell(c).SetCellValue(S.GetValue(Pi, null).ToString());
+                        WS.GetRow(NRow).GetCell(c).SetCellValue(S.GetValue(p, null).ToString());
                     }
                     c++;
                 }
                 i++;
             }
+            /*
+            int i = 0;
 
+            WS.CreateRow(3);
+            do
+            {
+                Console.WriteLine(i);
+                WS.GetRow(3).CreateCell(i);
+                WS.GetRow(3).GetCell(i).SetCellValue(i);
+                i++;
+
+            } while (i < MaxColumns);*/
+            
             using (var rs = new FileStream(st.MainExcel, FileMode.Create, FileAccess.Write))
             {               
                 WB.Write(rs);
