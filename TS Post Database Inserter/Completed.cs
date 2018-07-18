@@ -10,16 +10,14 @@ using System.Windows.Forms;
 
 namespace TS_Post_Database_Inserter
 {
-    public partial class MEC : Form
+    public partial class Completed : Form
     {
-        public MEC()
+        public Completed()
         {
             InitializeComponent();
-            string master = "Master Folder has changed";
-            label1.Text = master;
         }
 
-        private void ConBTN_Click(object sender, EventArgs e)
+        private void OKBtn_Click(object sender, EventArgs e)
         {
             this.Close();
         }

@@ -29,43 +29,24 @@
         private void InitializeComponent()
         {
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.OpenMEF = new System.Windows.Forms.Button();
-            this.ElL = new System.Windows.Forms.Label();
             this.Launch = new System.Windows.Forms.Button();
-            this.OpenLPDF = new System.Windows.Forms.Button();
             this.LpdfL = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.OpenEF = new System.Windows.Forms.Button();
             this.PHExcelL = new System.Windows.Forms.Label();
             this.PDFL = new System.Windows.Forms.Label();
+            this.OpenMFol = new System.Windows.Forms.Button();
+            this.MFol = new System.Windows.Forms.Label();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.SetupMasFold = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // OpenMEF
-            // 
-            this.OpenMEF.Location = new System.Drawing.Point(12, 136);
-            this.OpenMEF.Name = "OpenMEF";
-            this.OpenMEF.Size = new System.Drawing.Size(131, 23);
-            this.OpenMEF.TabIndex = 0;
-            this.OpenMEF.Text = "Select Master Excel File";
-            this.OpenMEF.UseVisualStyleBackColor = true;
-            this.OpenMEF.Click += new System.EventHandler(this.OpenMEF_Click);
-            // 
-            // ElL
-            // 
-            this.ElL.AutoSize = true;
-            this.ElL.Location = new System.Drawing.Point(149, 141);
-            this.ElL.Name = "ElL";
-            this.ElL.Size = new System.Drawing.Size(97, 13);
-            this.ElL.TabIndex = 1;
-            this.ElL.Text = "Master Excel Label";
-            // 
             // Launch
             // 
-            this.Launch.Location = new System.Drawing.Point(12, 176);
+            this.Launch.Location = new System.Drawing.Point(337, 302);
             this.Launch.Name = "Launch";
             this.Launch.Size = new System.Drawing.Size(75, 23);
             this.Launch.TabIndex = 2;
@@ -73,20 +54,10 @@
             this.Launch.UseVisualStyleBackColor = true;
             this.Launch.Click += new System.EventHandler(this.Launch_Click);
             // 
-            // OpenLPDF
-            // 
-            this.OpenLPDF.Location = new System.Drawing.Point(12, 90);
-            this.OpenLPDF.Name = "OpenLPDF";
-            this.OpenLPDF.Size = new System.Drawing.Size(131, 23);
-            this.OpenLPDF.TabIndex = 0;
-            this.OpenLPDF.Text = "Select Label PDF File";
-            this.OpenLPDF.UseVisualStyleBackColor = true;
-            this.OpenLPDF.Click += new System.EventHandler(this.OpenPDF_Click);
-            // 
             // LpdfL
             // 
             this.LpdfL.AutoSize = true;
-            this.LpdfL.Location = new System.Drawing.Point(149, 95);
+            this.LpdfL.Location = new System.Drawing.Point(13, 137);
             this.LpdfL.Name = "LpdfL";
             this.LpdfL.Size = new System.Drawing.Size(57, 13);
             this.LpdfL.TabIndex = 1;
@@ -102,20 +73,10 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Settings";
             // 
-            // OpenEF
-            // 
-            this.OpenEF.Location = new System.Drawing.Point(12, 47);
-            this.OpenEF.Name = "OpenEF";
-            this.OpenEF.Size = new System.Drawing.Size(131, 23);
-            this.OpenEF.TabIndex = 0;
-            this.OpenEF.Text = "Select Main Excel File";
-            this.OpenEF.UseVisualStyleBackColor = true;
-            this.OpenEF.Click += new System.EventHandler(this.OpenEF_Click);
-            // 
             // PHExcelL
             // 
             this.PHExcelL.AutoSize = true;
-            this.PHExcelL.Location = new System.Drawing.Point(149, 52);
+            this.PHExcelL.Location = new System.Drawing.Point(13, 116);
             this.PHExcelL.Name = "PHExcelL";
             this.PHExcelL.Size = new System.Drawing.Size(62, 13);
             this.PHExcelL.TabIndex = 1;
@@ -124,26 +85,54 @@
             // PDFL
             // 
             this.PDFL.AutoSize = true;
-            this.PDFL.Location = new System.Drawing.Point(149, 118);
+            this.PDFL.Location = new System.Drawing.Point(13, 158);
             this.PDFL.Name = "PDFL";
             this.PDFL.Size = new System.Drawing.Size(57, 13);
             this.PDFL.TabIndex = 1;
             this.PDFL.Text = "Label PDF";
             // 
+            // OpenMFol
+            // 
+            this.OpenMFol.Location = new System.Drawing.Point(16, 53);
+            this.OpenMFol.Name = "OpenMFol";
+            this.OpenMFol.Size = new System.Drawing.Size(131, 23);
+            this.OpenMFol.TabIndex = 0;
+            this.OpenMFol.Text = "Select Master Folder";
+            this.OpenMFol.UseVisualStyleBackColor = true;
+            this.OpenMFol.Click += new System.EventHandler(this.OpenMFol_Click);
+            // 
+            // MFol
+            // 
+            this.MFol.AutoSize = true;
+            this.MFol.Location = new System.Drawing.Point(13, 95);
+            this.MFol.Name = "MFol";
+            this.MFol.Size = new System.Drawing.Size(71, 13);
+            this.MFol.TabIndex = 1;
+            this.MFol.Text = "Master Folder";
+            // 
+            // SetupMasFold
+            // 
+            this.SetupMasFold.Location = new System.Drawing.Point(16, 252);
+            this.SetupMasFold.Name = "SetupMasFold";
+            this.SetupMasFold.Size = new System.Drawing.Size(131, 23);
+            this.SetupMasFold.TabIndex = 0;
+            this.SetupMasFold.Text = "Setup a Master Folder";
+            this.SetupMasFold.UseVisualStyleBackColor = true;
+            this.SetupMasFold.Click += new System.EventHandler(this.SetupMasFod_Click);
+            // 
             // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(424, 223);
+            this.ClientSize = new System.Drawing.Size(424, 337);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.Launch);
             this.Controls.Add(this.PDFL);
             this.Controls.Add(this.LpdfL);
             this.Controls.Add(this.PHExcelL);
-            this.Controls.Add(this.ElL);
-            this.Controls.Add(this.OpenLPDF);
-            this.Controls.Add(this.OpenEF);
-            this.Controls.Add(this.OpenMEF);
+            this.Controls.Add(this.MFol);
+            this.Controls.Add(this.SetupMasFold);
+            this.Controls.Add(this.OpenMFol);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Start";
@@ -158,15 +147,15 @@
         #endregion
 
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Button OpenMEF;
         private System.Windows.Forms.Button Launch;
-        private System.Windows.Forms.Button OpenLPDF;
         private System.Windows.Forms.Label LpdfL;
-        public System.Windows.Forms.Label ElL;
         protected internal System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button OpenEF;
         public System.Windows.Forms.Label PHExcelL;
         private System.Windows.Forms.Label PDFL;
+        private System.Windows.Forms.Button OpenMFol;
+        public System.Windows.Forms.Label MFol;
+        private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+        private System.Windows.Forms.Button SetupMasFold;
     }
 }
 

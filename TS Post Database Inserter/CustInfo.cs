@@ -1,41 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Configuration;
 using System.Windows.Forms;
 using System.Reflection;
 using iTextSharp.text.pdf.parser;
 using iTextSharp.text.pdf;
-using iTextSharp.text;
 using NPOI.XSSF.UserModel;
-using NPOI.XSSF.Model;
-using NPOI.SS.UserModel;
-using NPOI.SS.Util;
+
 using NLog;
 using PostSharp.Aspects;
 
 namespace TS_Post_Database_Inserter
 {
-    [Serializable]
-    class ExceptionWrapper : OnExceptionAspect
-    {
-        public override void OnException(MethodExecutionArgs args)
-        {
-            Exception ex = args.Exception;
-            base.OnException(args);
-            Console.WriteLine(ex);
-            Logger logger = LogManager.GetCurrentClassLogger();
-            logger.ErrorException("check error", ex);
-            Console.WriteLine("check code"); 
-        }
-    }
-
 
     [ExceptionWrapper]
     public partial class CustInfo : Form
@@ -60,19 +39,6 @@ namespace TS_Post_Database_Inserter
 
         public CustInfo(Start f)
         {
-            try
-            {
-                int zero = 0;
-                int res = 5 / zero;
-            }
-            catch (DivideByZeroException ex)
-            {
-                Console.WriteLine("issue");
-                throw;
-                // show error dialoge                
-            }
-            Console.WriteLine("error passed");
-
             InitializeComponent();
             st = f;
 
@@ -91,7 +57,7 @@ namespace TS_Post_Database_Inserter
             OpenPDF = Config.AppSettings.Settings["OpenPDF"].Value;
 
 
-            reader = new PdfReader(OpenPDF);
+            reader = new PdfReader(@"C:\test\Label to edit\src.pdf");
             MaxPg = reader.NumberOfPages;
             CurrentPg = 0;
 
@@ -374,6 +340,9 @@ namespace TS_Post_Database_Inserter
                     else if(w==0)
                     {
                         PushExcel();
+                        Completed completed = new Completed();
+                        completed.ShowDialog();
+                        this.Close();
                     }
                 }
             }
@@ -490,75 +459,16 @@ namespace TS_Post_Database_Inserter
 
         void PushExcel()
         {
+            //write to excel
             try
             {
                 fs = new FileStream(st.MainExcel, FileMode.Open, FileAccess.ReadWrite);
                 WB = new XSSFWorkbook(fs);
                 WS = WB.GetSheetAt(0) as XSSFSheet;
             }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine(ex);
-                Logger logger = LogManager.GetCurrentClassLogger();
-                logger.Error("lol excel error", ex);
-                // show error dialoge                
-            }
-            catch(Exception ex)
-            {
-                throw ex;
-            }
-            Console.WriteLine("error passed");
-
-            //Console.WriteLine(WS.PhysicalNumberOfRows);
-            //Console.WriteLine(WS.column);
-
-
-            /*
-            int cR = WS.PhysicalNumberOfRows;
-            int cC = WS.GetRow(WS.FirstRowNum).LastCellNum;
-            int aR = 0;
-
-            //int aC = 1;
-            for (int i = 0 ; i < ResPages.Count; i++)
-            {
-                aR = cR + i + 1;
-                Console.WriteLine("i = " + i);
-                Console.WriteLine("ar = " + aR);
-                Console.WriteLine("cr = " + cR);
-
-                foreach (Pages p in ResPages)
-                {
-                    List<string> vs = new List<string>();
-                    List<string> vp = new List<string>();
-                    List<PropertyInfo> pi = new List<PropertyInfo>();
-                    foreach (var prop in p.GetType().GetProperties())
-                    {
-                        if (prop.PropertyType == typeof(string) && prop.Name != "PDFtext")
-                        {
-                            vs.Add(prop.GetValue(p, null).ToString());
-                            vp.Add(prop.Name.ToString());
-                            pi.Add(prop);
-                        }
-                    }
-
-                    WS.CreateRow(aR);
-                    foreach (PropertyInfo S in pi)                        
-                    {
-                        for(int y = 0; y < cC; y++)
-                        {   
-                            if (S.Name == WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue)
-                            {
-                                Console.WriteLine("TOP: " + WS.GetRow(WS.FirstRowNum).GetCell(y).StringCellValue + ", aR: " + aR + ", Y: " + y);
-                                Console.WriteLine(S.GetValue(p, null).ToString());
-                                WS.GetRow(aR).CreateCell(y);
-                                WS.GetRow(aR).GetCell(y).SetCellValue(S.GetValue(p, null).ToString());
-                                Console.WriteLine("Check: " + WS.GetRow(aR).GetCell(y).StringCellValue);
-                                Console.WriteLine("");
-                            }
-                        }
-                    }
-                }
-            }   */
+            catch (Exception ex)
+            {throw new ExcelDocumentOpenException(); }
+            finally { Console.WriteLine("error passed"); }
 
             int CountRow = WS.PhysicalNumberOfRows;
             Console.WriteLine("CR: " + CountRow);
@@ -593,24 +503,19 @@ namespace TS_Post_Database_Inserter
                 }
                 i++;
             }
-            /*
-            int i = 0;
-
-            WS.CreateRow(3);
-            do
-            {
-                Console.WriteLine(i);
-                WS.GetRow(3).CreateCell(i);
-                WS.GetRow(3).GetCell(i).SetCellValue(i);
-                i++;
-
-            } while (i < MaxColumns);*/
             
             using (var rs = new FileStream(st.MainExcel, FileMode.Create, FileAccess.Write))
-            {               
-                WB.Write(rs);
-                rs.Close();
+            {
+                try
+                {
+                    WB.Write(rs);
+                    rs.Close();
+                }
+                catch(Exception ee)
+                { throw ee; }
             }
+            
+
         }
 
         private void CustInfo_FormClosing(object sender, FormClosingEventArgs e)
@@ -618,6 +523,34 @@ namespace TS_Post_Database_Inserter
             //empty
         }
     }
+
+    [Serializable]
+    class ExceptionWrapper : OnExceptionAspect
+    {
+        public override void OnException(MethodExecutionArgs args)
+        {
+            Exception ex = args.Exception;
+            base.OnException(args);
+            Console.WriteLine(ex);
+            Logger logger = LogManager.GetCurrentClassLogger();
+            logger.ErrorException(ex.InnerException.ToString(), ex);
+            Console.WriteLine("check code");
+        }
+    }
+
+    public class ExcelDocumentOpenException : Exception
+    {
+
+        public ExcelDocumentOpenException()
+            : base("Main Excel is being used by another application")
+        { }
+
+        public ExcelDocumentOpenException(Exception inner)
+            : base("Main Excel is being used by another application", inner)
+        { }
+    }
+
+
 
     public class Pages
     {

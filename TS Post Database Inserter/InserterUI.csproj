@@ -14,7 +14,8 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>publish\</PublishUrl>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\talle\Desktop\temp\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -24,10 +25,10 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationRevision>1</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -48,6 +49,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>1C5DDB99A6244EA649861733D3D396AC809C41EF</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>TS Post Database Inserter_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
@@ -104,7 +117,9 @@
     <Compile Include="CNTL.Designer.cs">
       <DependentUpon>CNTL.cs</DependentUpon>
     </Compile>
-    <Compile Include="CustInfo.cs" />
+    <Compile Include="CustInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="CustInfo.Designer.cs">
       <DependentUpon>CustInfo.cs</DependentUpon>
     </Compile>
@@ -113,6 +128,12 @@
     </Compile>
     <Compile Include="CHKINFO.Designer.cs">
       <DependentUpon>CHKINFO.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Completed.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Completed.Designer.cs">
+      <DependentUpon>Completed.cs</DependentUpon>
     </Compile>
     <Compile Include="MEC.cs">
       <SubType>Form</SubType>
@@ -137,6 +158,9 @@
     <EmbeddedResource Include="CNTL.resx">
       <DependentUpon>CNTL.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Completed.resx">
+      <DependentUpon>Completed.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="CustInfo.resx">
       <DependentUpon>CustInfo.cs</DependentUpon>
     </EmbeddedResource>
@@ -153,20 +177,18 @@
       <DependentUpon>Start.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="NLog.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -177,9 +199,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\Books1.xlsx" />
+    <None Include="Resources\SourceExcel.xlsx" />
+    <None Include="TS Post Database Inserter_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">
