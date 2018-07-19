@@ -38,6 +38,10 @@
             this.MFol = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.SetupMasFold = new System.Windows.Forms.Button();
+            this.CloseBtn = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.OpenMDIRBTN = new System.Windows.Forms.Button();
+            this.PDFNum = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -46,7 +50,7 @@
             // 
             // Launch
             // 
-            this.Launch.Location = new System.Drawing.Point(337, 302);
+            this.Launch.Location = new System.Drawing.Point(262, 254);
             this.Launch.Name = "Launch";
             this.Launch.Size = new System.Drawing.Size(75, 23);
             this.Launch.TabIndex = 2;
@@ -57,7 +61,7 @@
             // LpdfL
             // 
             this.LpdfL.AutoSize = true;
-            this.LpdfL.Location = new System.Drawing.Point(13, 137);
+            this.LpdfL.Location = new System.Drawing.Point(13, 162);
             this.LpdfL.Name = "LpdfL";
             this.LpdfL.Size = new System.Drawing.Size(57, 13);
             this.LpdfL.TabIndex = 1;
@@ -76,7 +80,7 @@
             // PHExcelL
             // 
             this.PHExcelL.AutoSize = true;
-            this.PHExcelL.Location = new System.Drawing.Point(13, 116);
+            this.PHExcelL.Location = new System.Drawing.Point(13, 149);
             this.PHExcelL.Name = "PHExcelL";
             this.PHExcelL.Size = new System.Drawing.Size(62, 13);
             this.PHExcelL.TabIndex = 1;
@@ -85,7 +89,7 @@
             // PDFL
             // 
             this.PDFL.AutoSize = true;
-            this.PDFL.Location = new System.Drawing.Point(13, 158);
+            this.PDFL.Location = new System.Drawing.Point(13, 175);
             this.PDFL.Name = "PDFL";
             this.PDFL.Size = new System.Drawing.Size(57, 13);
             this.PDFL.TabIndex = 1;
@@ -93,7 +97,7 @@
             // 
             // OpenMFol
             // 
-            this.OpenMFol.Location = new System.Drawing.Point(16, 53);
+            this.OpenMFol.Location = new System.Drawing.Point(12, 110);
             this.OpenMFol.Name = "OpenMFol";
             this.OpenMFol.Size = new System.Drawing.Size(131, 23);
             this.OpenMFol.TabIndex = 0;
@@ -104,7 +108,7 @@
             // MFol
             // 
             this.MFol.AutoSize = true;
-            this.MFol.Location = new System.Drawing.Point(13, 95);
+            this.MFol.Location = new System.Drawing.Point(13, 136);
             this.MFol.Name = "MFol";
             this.MFol.Size = new System.Drawing.Size(71, 13);
             this.MFol.TabIndex = 1;
@@ -112,7 +116,7 @@
             // 
             // SetupMasFold
             // 
-            this.SetupMasFold.Location = new System.Drawing.Point(16, 252);
+            this.SetupMasFold.Location = new System.Drawing.Point(206, 13);
             this.SetupMasFold.Name = "SetupMasFold";
             this.SetupMasFold.Size = new System.Drawing.Size(131, 23);
             this.SetupMasFold.TabIndex = 0;
@@ -120,18 +124,61 @@
             this.SetupMasFold.UseVisualStyleBackColor = true;
             this.SetupMasFold.Click += new System.EventHandler(this.SetupMasFod_Click);
             // 
+            // CloseBtn
+            // 
+            this.CloseBtn.Location = new System.Drawing.Point(16, 254);
+            this.CloseBtn.Name = "CloseBtn";
+            this.CloseBtn.Size = new System.Drawing.Size(75, 23);
+            this.CloseBtn.TabIndex = 2;
+            this.CloseBtn.Text = "Close";
+            this.CloseBtn.UseVisualStyleBackColor = true;
+            this.CloseBtn.Click += new System.EventHandler(this.CloseBtn_Click);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.DarkRed;
+            this.label2.Location = new System.Drawing.Point(73, 39);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(264, 13);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "ONLY CLICK IF YOU UNDERSTAND ITS FUNCTION";
+            // 
+            // OpenMDIRBTN
+            // 
+            this.OpenMDIRBTN.Location = new System.Drawing.Point(149, 110);
+            this.OpenMDIRBTN.Name = "OpenMDIRBTN";
+            this.OpenMDIRBTN.Size = new System.Drawing.Size(131, 23);
+            this.OpenMDIRBTN.TabIndex = 0;
+            this.OpenMDIRBTN.Text = "Open Master Folder";
+            this.OpenMDIRBTN.UseVisualStyleBackColor = true;
+            this.OpenMDIRBTN.Click += new System.EventHandler(this.OpenMDIR_Click);
+            // 
+            // PDFNum
+            // 
+            this.PDFNum.AutoSize = true;
+            this.PDFNum.Location = new System.Drawing.Point(13, 188);
+            this.PDFNum.Name = "PDFNum";
+            this.PDFNum.Size = new System.Drawing.Size(57, 13);
+            this.PDFNum.TabIndex = 1;
+            this.PDFNum.Text = "Label PDF";
+            // 
             // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(424, 337);
+            this.ClientSize = new System.Drawing.Size(349, 291);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.CloseBtn);
             this.Controls.Add(this.Launch);
+            this.Controls.Add(this.PDFNum);
             this.Controls.Add(this.PDFL);
             this.Controls.Add(this.LpdfL);
             this.Controls.Add(this.PHExcelL);
             this.Controls.Add(this.MFol);
             this.Controls.Add(this.SetupMasFold);
+            this.Controls.Add(this.OpenMDIRBTN);
             this.Controls.Add(this.OpenMFol);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
@@ -156,6 +203,10 @@
         public System.Windows.Forms.Label MFol;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.Button SetupMasFold;
+        private System.Windows.Forms.Button CloseBtn;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button OpenMDIRBTN;
+        private System.Windows.Forms.Label PDFNum;
     }
 }
 
