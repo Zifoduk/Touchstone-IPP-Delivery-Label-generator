@@ -35,6 +35,8 @@ namespace TS_Post_Database_Inserter
 
         public FileStream Filestream;
 
+
+
         public CustInfo(Start f)
         {
             InitializeComponent();
@@ -360,6 +362,9 @@ namespace TS_Post_Database_Inserter
             }
         }
 
+
+        //events
+
         private void Continue_Click(object sender, EventArgs e)
         {
             InfoUpdate(ChangePage.Next);
@@ -386,6 +391,8 @@ namespace TS_Post_Database_Inserter
                 checkBox.BackColor                 = Color.Red;
         }
 
+
+        //excel parts
 
         public XSSFWorkbook Workbook;
         public XSSFSheet WorkSheet;
@@ -458,6 +465,15 @@ namespace TS_Post_Database_Inserter
             }
         }
 
+        protected void AppendExcel()
+        {
+            //if(start.)
+        }
+
+
+
+        //empty
+
         private void CustInfo_FormClosing(object sender, FormClosingEventArgs e)
         {
             //empty
@@ -465,7 +481,7 @@ namespace TS_Post_Database_Inserter
     }
 
     [Serializable]
-    internal class ExceptionWrapper : OnExceptionAspect
+    public class ExceptionWrapper : OnExceptionAspect
     {
         public override void OnException(MethodExecutionArgs args)
         {
@@ -473,7 +489,7 @@ namespace TS_Post_Database_Inserter
             base.OnException(args);
             Console.WriteLine(ex);
             var logger = LogManager.GetCurrentClassLogger();
-            logger.ErrorException(ex.InnerException.ToString(), ex);
+            logger.ErrorException(ex.ToString(), ex);
             Console.WriteLine("check code");
         }
     }

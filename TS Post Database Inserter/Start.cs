@@ -8,9 +8,12 @@ using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using TS_Post_Database_Inserter.Properties;
+using NPOI.XSSF.UserModel;
 
 namespace TS_Post_Database_Inserter
 {
+
+    [ExceptionWrapper]
     public partial class Start : Form
     {
         private readonly Configuration Config = ConfigurationManager.OpenExeConfiguration(Application.ExecutablePath);
@@ -18,9 +21,16 @@ namespace TS_Post_Database_Inserter
         public string Tempfolder;
         public string CurrentSrc;
         public string MainExcel = "";
+        public string MasterExcel = "";
         public string OpenPDF;
+        public string Archives;
+        public string Master;
 
         private PdfReader reader;
+
+        public XSSFWorkbook Workbook;
+        public XSSFSheet WorkSheet;
+        public FileStream Filestream;
 
         public Start()
         {
@@ -80,16 +90,33 @@ namespace TS_Post_Database_Inserter
 
         private void Launch_Click(object sender, EventArgs e)
         {
-            //Excel.Application excel = new Excel.Application();
-            //Excel.Workbook sheet = excel.Workbooks.Open(Excel_Path);
-            //Excel.Worksheet x = excel.ActiveSheet as Excel.Worksheet;
+            bool FolderExists;
+            bool MainExcelExists;
+            bool OpenPDFExists;
+
+            if (Directory.Exists(Folder))
+                FolderExists = true;
+            else FolderExists = false;
+
+            if (File.Exists(MainExcel))
+                MainExcelExists = true;
+            else MainExcelExists = false;
+
+            if (File.Exists(OpenPDF))
+                OpenPDFExists = true;
+            else OpenPDFExists = false;
+
+
             FindFiles(true);
 
             var c = new CNTL();
-            if (Folder == "" || OpenPDF == "" || MainExcel == "")
+            if (!FolderExists || !OpenPDFExists || !MainExcelExists)
                 c.ShowDialog();
-            else
+            else if (FolderExists && OpenPDFExists && MainExcelExists)
+            {
+                Console.WriteLine("Folder: " + Folder + ", OpenPDF: " + OpenPDF + ", MainExcel: " + MainExcel);
                 LaunchMethod();
+            }
 
             if (Folder == "")
             {
@@ -127,6 +154,23 @@ namespace TS_Post_Database_Inserter
 
         internal void CheckExcel()
         {
+            try
+            {
+                if (!File.Exists(MasterExcel))
+                    File.WriteAllBytes(MasterExcel, Resources.SourceExcel);
+                Filestream = new FileStream(MasterExcel, FileMode.Open, FileAccess.ReadWrite);
+                Workbook = new XSSFWorkbook(Filestream);
+                WorkSheet = Workbook.GetSheetAt(0) as XSSFSheet;
+            }
+            catch (Exception ex)
+            {
+                throw new ExcelDocumentOpenException(ex);
+            }
+            finally
+            {
+                Console.WriteLine("error passed");
+            }
+
             Console.WriteLine(File.Exists(MainExcel));
             if (File.Exists(MainExcel))
             {
@@ -136,8 +180,12 @@ namespace TS_Post_Database_Inserter
                               Path.GetExtension(MainExcel);
                 if ((creation.Date - DateTime.Now.Date).TotalDays > 62)
                 {
+                    if (File.Exists(MasterExcel))
+                    {
+                        int Endrow = WorkSheet.PhysicalNumberOfRows;
+                    }
                     File.Move(MainExcel, NewFile);
-                    var st = new FileStream(MainExcel, FileMode.Create, FileAccess.ReadWrite);
+                    File.WriteAllBytes(MainExcel, Resources.SourceExcel);
                 }
             }
             else
@@ -164,6 +212,9 @@ namespace TS_Post_Database_Inserter
             Tempfolder = Folder + @"\temp";
             MainExcel = CurrentSrc + @"\Main.xlsx";
             OpenPDF = CurrentSrc + @"\src.pdf";
+            Archives = Folder + @"\Archives";
+            Master = Folder + @"\Master";
+            MasterExcel = Master + @"\Master.xlsx";
             if (create)
                 SortPDFS();
         }
@@ -172,9 +223,9 @@ namespace TS_Post_Database_Inserter
         {
             var srcPDF = CurrentSrc + @"\src.pdf";
             PdfReader.unethicalreading = true;
+            var CheckFilesTemp = new List<string>();
             try
             {
-                var CheckFilesTemp = new List<string>();
                 foreach (var files in Directory.GetFiles(CurrentSrc))
                     if (files.Contains(".pdf"))
                         CheckFilesTemp.Add(files);
@@ -222,38 +273,56 @@ namespace TS_Post_Database_Inserter
                                         reader.Close();
                                     }
                                 else
-                                    throw new Exception("Not PDFs in source");
+                                {
+                                }
+
+                                //throw new Exception("Not PDFs in source");
                             }
                             catch (Exception ee)
                             {
                                 throw new Exception("Not PDFs in source", ee);
                             }
+                            finally
+                            {
+                                pdf.Close();
+                                doc.Close();
+                            }
+
                         }
 
                         using (var streamX = new FileStream(srcPDF, FileMode.Create))
                         {
                             stream.WriteTo(streamX);
+                            streamX.Close();
                         }
+
+                        stream.Close();
                     }
 
-                    var h = 0;
-                    foreach (var f in Directory.GetFiles(CurrentSrc))
-                    {
-                        h++;
-                        if (!f.Contains("src.pdf"))
-                            File.Move(f,
-                                Folder + @"\Archives\PDF\" + DateTime.Now.ToString("yyyy_MM_dd") + " " + h + ".pdf");
-                    }
+                  
                 }
-                else
-                {
-                    Console.WriteLine(CurrentSrc);
-                    throw new Exception("CurrentSrc Folder doesn't exist or no pdfs in source file");
-                }
+
+                Console.WriteLine(CheckFilesTemp.Count);
+                Console.WriteLine("After");
+
             }
             catch (Exception ee)
             {
                 Console.WriteLine(ee);
+            }
+            finally
+            {
+                for (var index = 0; index < CheckFilesTemp.Count; index++)
+                {
+                    var file = CheckFilesTemp[index];
+                    if (!file.Contains("src.pdf"))
+                    {
+                        File.SetLastWriteTime(file, DateTime.Now);
+                        File.Move(file,
+                            Archives + @"\PDF\" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm") + " " + (index + 1) + ".pdf");
+                        
+                    }
+                }
             }
         }
 
@@ -272,27 +341,49 @@ namespace TS_Post_Database_Inserter
                 PHExcelL.ForeColor = Color.Black;
 
                 int index = 0;
-                foreach(var file in CheckFilesTemp)
-                    if (!file.Contains("src.pdf"))
-                        index++;
 
-                if (CheckFilesTemp.Contains("src.pdf"))
+                if(CheckFilesTemp.Count > 0)
+                    foreach(var file in CheckFilesTemp) { 
+                        if (file.Contains("src.pdf"))
+                        {
+                            LpdfL.Text = OpenPDF;
+                            LpdfL.ForeColor = Color.Black;
+                            reader = new PdfReader(OpenPDF);
+                            PDFL.Text = "Number of Labels found: " + reader.NumberOfPages;
+                        }
+                        else
+                        {
+                            LpdfL.Text = "Error";
+                            LpdfL.ForeColor = Color.DarkRed;
+                            PDFL.ForeColor = Color.DarkRed;
+                            PDFL.Text =
+                                "Error: unable to find source PDFs.\r\nMake sure Label PDFs are in folder 'Insert Label PDFs to edit'";
+
+                        }
+                }else
                 {
-                    LpdfL.Text = OpenPDF;
-                    LpdfL.ForeColor = Color.Black;
-                    reader = new PdfReader(OpenPDF);
-                    PDFL.Text = "Number of Labels found: " + reader.NumberOfPages;
+                    LpdfL.Text = "Error";
+                    LpdfL.ForeColor = Color.DarkRed;
+                    PDFL.ForeColor = Color.DarkRed;
+                    PDFL.Text = "Src PDF not created - Refer to Manual(Section 2.3)";
+                    PDFNum.Text =
+                        "Error: unable to find source PDFs.\r\nMake sure Label PDFs are in folder 'Insert Label PDFs to edit'";
+                    PDFNum.ForeColor = Color.DarkRed;
+                }
+
+
+                if (index > 0)
+                { 
+                    PDFNum.Text = "Number of PDFs found in folder: " + index;
+                    PDFNum.ForeColor = Color.Black;
                 }
                 else
                 {
+                    PDFNum.Text = "No PDFs found, Copy and Paste Label PDFs into\r\n folder";
+                    PDFNum.ForeColor = Color.DarkRed;
 
-                    PDFL.ForeColor = Color.DarkRed;
-                    PDFL.Text =
-                        "Error: unable to find source PDFs.\r\nMake sure Label PDFs are in folder 'insert label pdf here'";
-
-                    LpdfL.Text = "Error";
-                    LpdfL.ForeColor = Color.DarkRed;
                 }
+                    
             }
             else
             {
@@ -308,10 +399,26 @@ namespace TS_Post_Database_Inserter
 
         private void SetupMasFod_Click(object sender, EventArgs e)
         {
+            var folder = "";
             var folderBrowser = folderBrowserDialog1;
-            if (folderBrowser.ShowDialog() != DialogResult.OK) return;
-            var folder = folderBrowser.SelectedPath;
-            Setup(Folder);
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
+            {
+                Console.WriteLine("First check: " + folderBrowser.SelectedPath);
+                folder = folderBrowser.SelectedPath;
+                Console.WriteLine("Second check: " + folder);
+                Setup(folder);
+            }
+            Console.WriteLine("Third check: " + folder);
+
+            DialogResult changeFolderDialoge = MessageBox.Show("Do you want to set the new master folder as the default?", "Maybe", MessageBoxButtons.YesNo);
+            if (changeFolderDialoge == DialogResult.Yes)
+            {
+                Folder = folder;
+                Console.WriteLine("Folder: " + Folder);
+                FindFiles(false);
+                UpdateUI();
+            }
+
         }
 
         private void Setup(String folder)

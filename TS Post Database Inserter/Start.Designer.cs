@@ -41,6 +41,7 @@
             this.CloseBtn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.OpenMDIRBTN = new System.Windows.Forms.Button();
+            this.PDFNum = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -153,6 +154,15 @@
             this.OpenMDIRBTN.UseVisualStyleBackColor = true;
             this.OpenMDIRBTN.Click += new System.EventHandler(this.OpenMDIR_Click);
             // 
+            // PDFNum
+            // 
+            this.PDFNum.AutoSize = true;
+            this.PDFNum.Location = new System.Drawing.Point(13, 188);
+            this.PDFNum.Name = "PDFNum";
+            this.PDFNum.Size = new System.Drawing.Size(57, 13);
+            this.PDFNum.TabIndex = 1;
+            this.PDFNum.Text = "Label PDF";
+            // 
             // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,6 +172,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CloseBtn);
             this.Controls.Add(this.Launch);
+            this.Controls.Add(this.PDFNum);
             this.Controls.Add(this.PDFL);
             this.Controls.Add(this.LpdfL);
             this.Controls.Add(this.PHExcelL);
@@ -195,6 +206,7 @@
         private System.Windows.Forms.Button CloseBtn;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button OpenMDIRBTN;
+        private System.Windows.Forms.Label PDFNum;
     }
 }
 
