@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
@@ -34,7 +35,10 @@ namespace TS_Post_Database_Inserter
 
             //File Settings location
             Folder = Config.AppSettings.Settings["Folder"].Value;
-            FindFiles();
+
+            FindFiles(false);
+            if (!String.IsNullOrEmpty(Folder) || !Directory.Exists(Tempfolder) || !Directory.Exists(CurrentSrc))
+                Setup(Folder);
             CheckExcel();
 
 
@@ -56,7 +60,7 @@ namespace TS_Post_Database_Inserter
                     mec.ShowDialog();
                     Config.AppSettings.Settings["Folder"].Value = Folder;
                     Config.Save(ConfigurationSaveMode.Full);
-                    FindFiles();
+                    FindFiles(false);
                     CheckExcel();
                     UpdateUI();
                 }
@@ -67,7 +71,7 @@ namespace TS_Post_Database_Inserter
                     Config.Save(ConfigurationSaveMode.Full);
                     var mec = new MEC();
                     mec.ShowDialog();
-                    FindFiles();
+                    FindFiles(false);
                     CheckExcel();
                     UpdateUI();
                 }
@@ -79,7 +83,7 @@ namespace TS_Post_Database_Inserter
             //Excel.Application excel = new Excel.Application();
             //Excel.Workbook sheet = excel.Workbooks.Open(Excel_Path);
             //Excel.Worksheet x = excel.ActiveSheet as Excel.Worksheet;
-            FindFiles();
+            FindFiles(true);
 
             var c = new CNTL();
             if (Folder == "" || OpenPDF == "" || MainExcel == "")
@@ -144,7 +148,7 @@ namespace TS_Post_Database_Inserter
                 }
                 catch
                 {
-                    if (Folder != "")
+                    if (Folder == "")
                         throw new Exception("Failed to copy Source Excel");
                 }
                 finally
@@ -154,13 +158,14 @@ namespace TS_Post_Database_Inserter
             }
         }
 
-        private void FindFiles()
+        private void FindFiles(bool create)
         {
-            CurrentSrc = Folder + @"\Label to edit";
+            CurrentSrc = Folder + @"\Insert Label PDFs to edit";
             Tempfolder = Folder + @"\temp";
             MainExcel = CurrentSrc + @"\Main.xlsx";
             OpenPDF = CurrentSrc + @"\src.pdf";
-            SortPDFS();
+            if (create)
+                SortPDFS();
         }
 
         private void SortPDFS()
@@ -182,7 +187,7 @@ namespace TS_Post_Database_Inserter
                     File.Move(srcPDF, Tempfolder + @"\src" + DateTime.Now.ToString("yyyy_MM_dd") + ".pdf");
                 }
 
-                if (Directory.Exists(CurrentSrc) && !CheckFilesTemp.Contains("src.pdf"))
+                if (Directory.Exists(CurrentSrc) && !CheckFilesTemp.Contains("src.pdf") && CheckFilesTemp.Count > 0)
                 {
                     using (var stream = new MemoryStream())
                     {
@@ -221,7 +226,7 @@ namespace TS_Post_Database_Inserter
                             }
                             catch (Exception ee)
                             {
-                                throw new Exception("Not PDFs in source");
+                                throw new Exception("Not PDFs in source", ee);
                             }
                         }
 
@@ -243,7 +248,7 @@ namespace TS_Post_Database_Inserter
                 else
                 {
                     Console.WriteLine(CurrentSrc);
-                    throw new Exception("CurrentSrc Folder doesn't exist");
+                    throw new Exception("CurrentSrc Folder doesn't exist or no pdfs in source file");
                 }
             }
             catch (Exception ee)
@@ -254,16 +259,40 @@ namespace TS_Post_Database_Inserter
 
         private void UpdateUI()
         {
+            var CheckFilesTemp = new List<string>();
+            foreach (var files in Directory.GetFiles(CurrentSrc))
+                if (files.Contains(".pdf"))
+                    CheckFilesTemp.Add(files);
+
             if (Folder != "")
             {
                 MFol.Text = Folder;
                 MFol.ForeColor = Color.Black;
                 PHExcelL.Text = MainExcel;
                 PHExcelL.ForeColor = Color.Black;
-                LpdfL.Text = OpenPDF;
-                LpdfL.ForeColor = Color.Black;
-                reader = new PdfReader(OpenPDF);
-                PDFL.Text = "Number of Labels found: " + reader.NumberOfPages;
+
+                int index = 0;
+                foreach(var file in CheckFilesTemp)
+                    if (!file.Contains("src.pdf"))
+                        index++;
+
+                if (CheckFilesTemp.Contains("src.pdf"))
+                {
+                    LpdfL.Text = OpenPDF;
+                    LpdfL.ForeColor = Color.Black;
+                    reader = new PdfReader(OpenPDF);
+                    PDFL.Text = "Number of Labels found: " + reader.NumberOfPages;
+                }
+                else
+                {
+
+                    PDFL.ForeColor = Color.DarkRed;
+                    PDFL.Text =
+                        "Error: unable to find source PDFs.\r\nMake sure Label PDFs are in folder 'insert label pdf here'";
+
+                    LpdfL.Text = "Error";
+                    LpdfL.ForeColor = Color.DarkRed;
+                }
             }
             else
             {
@@ -282,12 +311,31 @@ namespace TS_Post_Database_Inserter
             var folderBrowser = folderBrowserDialog1;
             if (folderBrowser.ShowDialog() != DialogResult.OK) return;
             var folder = folderBrowser.SelectedPath;
-            Directory.CreateDirectory(folder + @"\Label to edit");
+            Setup(Folder);
+        }
+
+        private void Setup(String folder)
+        {
+            Directory.CreateDirectory(folder + @"\Insert Label PDFs to edit");
             Directory.CreateDirectory(folder + @"\temp");
             Directory.CreateDirectory(folder + @"\Archives");
             Directory.CreateDirectory(folder + @"\Archives\PDF");
             Directory.CreateDirectory(folder + @"\Archives\XLSX");
             Directory.CreateDirectory(folder + @"\Master");
+        }
+
+        private void CloseBtn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void OpenMDIR_Click(object sender, EventArgs e)
+        {
+            if (Folder != null || Folder != "")
+            {
+                try{Process.Start(Folder);}
+                catch (Exception ee){throw new Exception("Failed to open folder", ee);}
+            }
         }
     }
 }

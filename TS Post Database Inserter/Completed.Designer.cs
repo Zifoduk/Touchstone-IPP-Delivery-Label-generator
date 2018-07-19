@@ -31,11 +31,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Completed));
             this.OKBtn = new System.Windows.Forms.Button();
             this.OnScreenText = new System.Windows.Forms.Label();
+            this.Progressbar = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // OKBtn
             // 
-            this.OKBtn.Location = new System.Drawing.Point(116, 82);
+            this.OKBtn.Enabled = false;
+            this.OKBtn.Location = new System.Drawing.Point(223, 82);
             this.OKBtn.Name = "OKBtn";
             this.OKBtn.Size = new System.Drawing.Size(75, 23);
             this.OKBtn.TabIndex = 0;
@@ -46,19 +48,29 @@
             // OnScreenText
             // 
             this.OnScreenText.AutoSize = true;
-            this.OnScreenText.Location = new System.Drawing.Point(5, 11);
+            this.OnScreenText.Location = new System.Drawing.Point(10, 14);
             this.OnScreenText.Name = "OnScreenText";
             this.OnScreenText.Size = new System.Drawing.Size(301, 65);
             this.OnScreenText.TabIndex = 1;
             this.OnScreenText.Text = resources.GetString("OnScreenText.Text");
             this.OnScreenText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // Progressbar
+            // 
+            this.Progressbar.Location = new System.Drawing.Point(12, 82);
+            this.Progressbar.Maximum = 200;
+            this.Progressbar.Name = "Progressbar";
+            this.Progressbar.Size = new System.Drawing.Size(205, 23);
+            this.Progressbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.Progressbar.TabIndex = 2;
+            // 
             // Completed
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(310, 117);
+            this.ClientSize = new System.Drawing.Size(325, 117);
             this.ControlBox = false;
+            this.Controls.Add(this.Progressbar);
             this.Controls.Add(this.OnScreenText);
             this.Controls.Add(this.OKBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -76,5 +88,6 @@
 
         private System.Windows.Forms.Button OKBtn;
         private System.Windows.Forms.Label OnScreenText;
+        public System.Windows.Forms.ProgressBar Progressbar;
     }
 }
