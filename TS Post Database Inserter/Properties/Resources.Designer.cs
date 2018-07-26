@@ -61,6 +61,16 @@ namespace TS_Post_Database_Inserter.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon icon_lPk_icon {
+            get {
+                object obj = ResourceManager.GetObject("icon_lPk_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
         public static byte[] SourceExcel {

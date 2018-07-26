@@ -457,11 +457,11 @@ namespace TS_Post_Database_Inserter
                     fileStream.Close();
                     completed.Progressbar.Increment(60);
                 }
-                catch (Exception ee)
+                catch (Exception )
                 {
                     completed.Progressbar.Increment(-60);
                     completed.Progressbar.ForeColor = Color.Red;
-                    throw ee;
+                    throw;
                 }
             }
         }
@@ -507,6 +507,7 @@ namespace TS_Post_Database_Inserter
         }
     }
 
+    [Serializable]
     public class ExcelDocumentOpenException : Exception
     {
         public ExcelDocumentOpenException()
@@ -519,6 +520,7 @@ namespace TS_Post_Database_Inserter
         {
         }
     }
+
 
 
     public class Pages

@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InserterUI", "TS Post Database Inserter\InserterUI.csproj", "{68D942F6-0D9C-42AB-9A43-925AFAA57CE5}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{EE5E553A-2D61-4DEB-AB57-C18DF37C2602}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{68D942F6-0D9C-42AB-9A43-925AFAA57CE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68D942F6-0D9C-42AB-9A43-925AFAA57CE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68D942F6-0D9C-42AB-9A43-925AFAA57CE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE5E553A-2D61-4DEB-AB57-C18DF37C2602}.Debug|Any CPU.ActiveCfg = Debug
+		{EE5E553A-2D61-4DEB-AB57-C18DF37C2602}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
