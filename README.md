@@ -1,4 +1,4 @@
-# Touchstone-IPP-Delivery-Label-generator
+# Touchstone Inserter
 For Touchstone Freight LTD IPostParcel delivery label generator to excel document
 
 Current version is v1.0
