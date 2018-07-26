@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:Setup"
+"ProjectName" = "8:TS Inserter Setup"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -707,9 +707,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup"
+        "ProductName" = "8:TS Inserter"
         "ProductCode" = "8:{5FD2C327-813E-4CA8-B2E0-0CE59433CE90}"
-        "PackageCode" = "8:{57287CA0-D1DD-4AC8-870E-AD6FD8ECA994}"
+        "PackageCode" = "8:{AB7E88D3-4955-4C66-A07C-2F4AF07756B6}"
         "UpgradeCode" = "8:{9E26ACC6-D370-4872-B750-BABF9FDC4504}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -720,7 +720,7 @@
         "Manufacturer" = "8:Touchstone Freight LTD"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Setup"
+        "Title" = "8:TS Inserter Setup"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Touchstone Freight LTD"
         "Keywords" = "8:"
@@ -840,7 +840,7 @@
             "Target" = "8:_4FE897AFE0234AFEA2D6A29C4FB4CE8C"
             "Folder" = "8:_66B551DF9B9D45DEBCAFBDEF605A3CC7"
             "WorkingFolder" = "8:_8B6760BBF4104ADDB3FD39C6BDDF133A"
-            "Icon" = "8:"
+            "Icon" = "8:_5C982AB93E5A45EBA407E2D9AFC04BF6"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_E8F8378DEF2D4C25AC6D9E2C5F9E6FAE"
@@ -854,7 +854,7 @@
             "Target" = "8:_4FE897AFE0234AFEA2D6A29C4FB4CE8C"
             "Folder" = "8:_1ADE4B841E444A51979EBED9A257FA9B"
             "WorkingFolder" = "8:_8B6760BBF4104ADDB3FD39C6BDDF133A"
-            "Icon" = "8:"
+            "Icon" = "8:_5C982AB93E5A45EBA407E2D9AFC04BF6"
             "Feature" = "8:"
             }
         }
