@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Start));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.Launch = new System.Windows.Forms.Button();
             this.LpdfL = new System.Windows.Forms.Label();
@@ -42,6 +43,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.OpenMDIRBTN = new System.Windows.Forms.Button();
             this.PDFNum = new System.Windows.Forms.Label();
+            this.RefreshBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -50,6 +52,7 @@
             // 
             // Launch
             // 
+            this.Launch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.Launch.Location = new System.Drawing.Point(262, 254);
             this.Launch.Name = "Launch";
             this.Launch.Size = new System.Drawing.Size(75, 23);
@@ -116,6 +119,7 @@
             // 
             // SetupMasFold
             // 
+            this.SetupMasFold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.SetupMasFold.Location = new System.Drawing.Point(206, 13);
             this.SetupMasFold.Name = "SetupMasFold";
             this.SetupMasFold.Size = new System.Drawing.Size(131, 23);
@@ -126,6 +130,7 @@
             // 
             // CloseBtn
             // 
+            this.CloseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.CloseBtn.Location = new System.Drawing.Point(16, 254);
             this.CloseBtn.Name = "CloseBtn";
             this.CloseBtn.Size = new System.Drawing.Size(75, 23);
@@ -136,6 +141,7 @@
             // 
             // label2
             // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.DarkRed;
             this.label2.Location = new System.Drawing.Point(73, 39);
@@ -146,7 +152,7 @@
             // 
             // OpenMDIRBTN
             // 
-            this.OpenMDIRBTN.Location = new System.Drawing.Point(149, 110);
+            this.OpenMDIRBTN.Location = new System.Drawing.Point(12, 81);
             this.OpenMDIRBTN.Name = "OpenMDIRBTN";
             this.OpenMDIRBTN.Size = new System.Drawing.Size(131, 23);
             this.OpenMDIRBTN.TabIndex = 0;
@@ -163,10 +169,21 @@
             this.PDFNum.TabIndex = 1;
             this.PDFNum.Text = "Label PDF";
             // 
+            // RefreshBtn
+            // 
+            this.RefreshBtn.Location = new System.Drawing.Point(153, 110);
+            this.RefreshBtn.Name = "RefreshBtn";
+            this.RefreshBtn.Size = new System.Drawing.Size(82, 23);
+            this.RefreshBtn.TabIndex = 0;
+            this.RefreshBtn.Text = "Refresh";
+            this.RefreshBtn.UseVisualStyleBackColor = true;
+            this.RefreshBtn.Click += new System.EventHandler(this.RefreshBtn_Click);
+            // 
             // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(349, 291);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -179,8 +196,10 @@
             this.Controls.Add(this.MFol);
             this.Controls.Add(this.SetupMasFold);
             this.Controls.Add(this.OpenMDIRBTN);
+            this.Controls.Add(this.RefreshBtn);
             this.Controls.Add(this.OpenMFol);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Start";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -194,7 +213,6 @@
         #endregion
 
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Button Launch;
         private System.Windows.Forms.Label LpdfL;
         protected internal System.Windows.Forms.Label label1;
         public System.Windows.Forms.Label PHExcelL;
@@ -207,6 +225,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button OpenMDIRBTN;
         private System.Windows.Forms.Label PDFNum;
+        private System.Windows.Forms.Button RefreshBtn;
+        private System.Windows.Forms.Button Launch;
     }
 }
 

@@ -51,10 +51,8 @@ namespace TS_Post_Database_Inserter
                 Setup(Folder);
             CheckExcel();
 
-
-            Config.Save(ConfigurationSaveMode.Full);
-
             UpdateUI();
+            SaveLocation();
 
             Config.AppSettings.Settings["OpenPDF"].Value = OpenPDF;
         }
@@ -69,21 +67,21 @@ namespace TS_Post_Database_Inserter
                     var mec = new MECheck(this, fb.SelectedPath, 0);
                     mec.ShowDialog();
                     Config.AppSettings.Settings["Folder"].Value = Folder;
-                    Config.Save(ConfigurationSaveMode.Full);
                     FindFiles(false);
                     CheckExcel();
                     UpdateUI();
+                    SaveLocation();
                 }
                 else
                 {
                     Folder = fb.SelectedPath;
                     Config.AppSettings.Settings["Folder"].Value = Folder;
-                    Config.Save(ConfigurationSaveMode.Full);
                     var mec = new MEC();
                     mec.ShowDialog();
                     FindFiles(false);
                     CheckExcel();
                     UpdateUI();
+                    SaveLocation();
                 }
             }
         }
@@ -107,11 +105,10 @@ namespace TS_Post_Database_Inserter
             else OpenPDFExists = false;
 
 
-            FindFiles(true);
-
-            var c = new CNTL();
+            FindFiles(false);
+            
             if (!FolderExists || !OpenPDFExists || !MainExcelExists)
-                c.ShowDialog();
+                MessageBox.Show("Error 455: Cannot launch Edittor\r\nFix settings in RED", "Error 455",MessageBoxButtons.OK);
             else if (FolderExists && OpenPDFExists && MainExcelExists)
             {
                 Console.WriteLine("Folder: " + Folder + ", OpenPDF: " + OpenPDF + ", MainExcel: " + MainExcel);
@@ -146,7 +143,7 @@ namespace TS_Post_Database_Inserter
 
         private void Start_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Config.Save(ConfigurationSaveMode.Full);
+            SaveLocation();
         }
 
 
@@ -224,19 +221,29 @@ namespace TS_Post_Database_Inserter
             var srcPDF = CurrentSrc + @"\src.pdf";
             PdfReader.unethicalreading = true;
             var CheckFilesTemp = new List<string>();
+
+            var newSrc = Tempfolder + @"\src" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm") + ".pdf";
+            foreach (var files in Directory.GetFiles(CurrentSrc))
+                if (files.Contains(".pdf"))
+                    CheckFilesTemp.Add(files);
+
+            bool next = false;
+            if (File.Exists(srcPDF) && CheckFilesTemp.Count > 1)
+            {
+                if (!Directory.Exists(Tempfolder))
+                    Directory.CreateDirectory(Tempfolder);
+                next = true;
+            }
+
+            if (next)
+            {
+                File.Move(srcPDF, newSrc);
+                next = false;
+            }
+
             try
             {
-                foreach (var files in Directory.GetFiles(CurrentSrc))
-                    if (files.Contains(".pdf"))
-                        CheckFilesTemp.Add(files);
 
-
-                if (File.Exists(srcPDF) && CheckFilesTemp.Count > 1)
-                {
-                    if (!Directory.Exists(Tempfolder))
-                        Directory.CreateDirectory(Tempfolder);
-                    File.Move(srcPDF, Tempfolder + @"\src" + DateTime.Now.ToString("yyyy_MM_dd") + ".pdf");
-                }
 
                 if (Directory.Exists(CurrentSrc) && !CheckFilesTemp.Contains("src.pdf") && CheckFilesTemp.Count > 0)
                 {
@@ -244,8 +251,7 @@ namespace TS_Post_Database_Inserter
                     {
                         using (var doc = new Document())
                         {
-                            var pdf = new PdfCopy(doc, stream);
-                            pdf.CloseStream = false;
+                            var pdf = new PdfCopy(doc, stream) {CloseStream = false};
                             doc.Open();
 
                             PdfReader reader = null;
@@ -255,7 +261,6 @@ namespace TS_Post_Database_Inserter
                             foreach (var Files in Directory.GetFiles(CurrentSrc))
                                 if (Files.Contains(".pdf"))
                                     FilesTemp.Add(Files);
-
                             try
                             {
                                 if (FilesTemp.Count > 0)
@@ -312,16 +317,27 @@ namespace TS_Post_Database_Inserter
             }
             finally
             {
-                for (var index = 0; index < CheckFilesTemp.Count; index++)
+
+            }
+        }
+
+        public void ArchivePDF()
+        {
+
+            var FilesTemp = new List<string>();
+            foreach (var Files in Directory.GetFiles(CurrentSrc))
+                if (Files.Contains(".pdf"))
+                    FilesTemp.Add(Files);
+
+            for (var index = 0; index < FilesTemp.Count; index++)
+            {
+                var file = FilesTemp[index];
+                if (!file.Contains("src.pdf"))
                 {
-                    var file = CheckFilesTemp[index];
-                    if (!file.Contains("src.pdf"))
-                    {
-                        File.SetLastWriteTime(file, DateTime.Now);
-                        File.Move(file,
-                            Archives + @"\PDF\" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm") + " " + (index + 1) + ".pdf");
-                        
-                    }
+                    File.SetLastWriteTime(file, DateTime.Now);
+                    File.Move(file,
+                        Archives + @"\PDF\" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm") + " " + (index + 1) + ".pdf");
+
                 }
             }
         }
@@ -342,8 +358,9 @@ namespace TS_Post_Database_Inserter
 
                 int index = 0;
 
-                if(CheckFilesTemp.Count > 0)
-                    foreach(var file in CheckFilesTemp) { 
+                if(CheckFilesTemp.Count > 0) {
+                    foreach (var file in CheckFilesTemp)
+                    {
                         if (file.Contains("src.pdf"))
                         {
                             LpdfL.Text = OpenPDF;
@@ -353,6 +370,7 @@ namespace TS_Post_Database_Inserter
                         }
                         else
                         {
+                            index ++;
                             LpdfL.Text = "Error";
                             LpdfL.ForeColor = Color.DarkRed;
                             PDFL.ForeColor = Color.DarkRed;
@@ -360,7 +378,10 @@ namespace TS_Post_Database_Inserter
                                 "Error: unable to find source PDFs.\r\nMake sure Label PDFs are in folder 'Insert Label PDFs to edit'";
 
                         }
-                }else
+
+                    }
+                }
+                else
                 {
                     LpdfL.Text = "Error";
                     LpdfL.ForeColor = Color.DarkRed;
@@ -410,7 +431,7 @@ namespace TS_Post_Database_Inserter
             }
             Console.WriteLine("Third check: " + folder);
 
-            DialogResult changeFolderDialoge = MessageBox.Show("Do you want to set the new master folder as the default?", "Maybe", MessageBoxButtons.YesNo);
+            DialogResult changeFolderDialoge = MessageBox.Show("Do you want to set the new master folder as the default?", "Set as default", MessageBoxButtons.YesNo);
             if (changeFolderDialoge == DialogResult.Yes)
             {
                 Folder = folder;
@@ -443,6 +464,42 @@ namespace TS_Post_Database_Inserter
                 try{Process.Start(Folder);}
                 catch (Exception ee){throw new Exception("Failed to open folder", ee);}
             }
+        }
+
+        private void RefreshBtn_Click(object sender, EventArgs e)
+        {
+            DialogResult CheckCorrectPDFsInFolder =
+                MessageBox.Show("Have all of the required Labels been copied into the correct folder?",
+                    "Check your labels", MessageBoxButtons.YesNo);
+            if (CheckCorrectPDFsInFolder == DialogResult.Yes)
+            {
+                DialogResult Sure =
+                    MessageBox.Show("Are you sure?",
+                        "Are you sure you have checked your labels", MessageBoxButtons.YesNo);
+                if (Sure == DialogResult.Yes)
+                { 
+                    FindFiles(true);
+                    UpdateUI();
+                }
+            }
+
+        }
+
+        private void SaveLocation()
+        {
+            Config.AppSettings.Settings["Folder"].Value = Folder;
+            try
+            {
+
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error:" + e, "Error thrown", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine(e);
+                throw;
+            }
+
+            Config.Save(ConfigurationSaveMode.Full, true);
         }
     }
 }

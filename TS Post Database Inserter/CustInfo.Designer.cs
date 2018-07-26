@@ -63,6 +63,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.PrevBtn = new System.Windows.Forms.Button();
+            this.TickallCB = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -418,6 +419,17 @@
             this.PrevBtn.UseVisualStyleBackColor = true;
             this.PrevBtn.Click += new System.EventHandler(this.PrevBtn_Click);
             // 
+            // TickallCB
+            // 
+            this.TickallCB.AutoSize = true;
+            this.TickallCB.Location = new System.Drawing.Point(282, 590);
+            this.TickallCB.Name = "TickallCB";
+            this.TickallCB.Size = new System.Drawing.Size(60, 17);
+            this.TickallCB.TabIndex = 6;
+            this.TickallCB.Text = "Tick all";
+            this.TickallCB.UseVisualStyleBackColor = true;
+            this.TickallCB.CheckedChanged += new System.EventHandler(this.TickallCB_CheckedChanged);
+            // 
             // CustInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -425,6 +437,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(684, 621);
             this.ControlBox = false;
+            this.Controls.Add(this.TickallCB);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.PrevBtn);
             this.Controls.Add(this.Cancel);
@@ -441,6 +454,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -481,5 +495,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label PgNumL;
         private System.Windows.Forms.Button PrevBtn;
+        private System.Windows.Forms.CheckBox TickallCB;
     }
 }

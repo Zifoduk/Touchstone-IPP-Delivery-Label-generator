@@ -70,9 +70,6 @@ namespace TS_Post_Database_Inserter
                 ResPages.Add(tempPG);
             }
 
-            var v                                           = -1;
-            foreach (var o in ResPages[CurrentPg].ResultArr) v++;
-
             //////Name
             foreach (var pages in ResPages)
             {
@@ -155,13 +152,16 @@ namespace TS_Post_Database_Inserter
             ////////Tel
             foreach (var pages in ResPages)
             {
-                var x                                       = 0;
-                var tArr                                    = pages.ResultArr;
-                for (var i                                  = 0; i < tArr.Length; i++)
+                var x = 0;
+                var tArr = pages.ResultArr;
+                for (var i = 0; i < tArr.Length; i++)
+                {
+                    Console.WriteLine(tArr[i].IndexOf("Next Day"));
                     if (tArr[i].IndexOf("Next Day") > -1)
-                        x                                   = i + 5;
+                        x = i + 5;
+                }
 
-                pages.Telephone                             = tArr[x];
+            pages.Telephone                             = tArr[x];
             }
 
             ////////Location
@@ -305,6 +305,7 @@ namespace TS_Post_Database_Inserter
                     {
                         var completed        = new Completed(this);
                         completed.ShowDialog();
+                        start.ArchivePDF();
                         Close();
                     }
                 }
@@ -478,6 +479,18 @@ namespace TS_Post_Database_Inserter
         {
             //empty
         }
+
+        private void TickallCB_CheckedChanged(object sender, EventArgs e)
+        {
+            if (TickallCB.CheckState == CheckState.Checked)
+                foreach (var c in listCheckBoxes)
+                    c.CheckState = CheckState.Checked;
+            else if (TickallCB.CheckState == CheckState.Unchecked)
+                foreach (var c in listCheckBoxes)
+                    c.CheckState = CheckState.Unchecked;
+            else if (TickallCB.CheckState == CheckState.Indeterminate)
+                TickallCB.CheckState = CheckState.Unchecked;
+        }
     }
 
     [Serializable]
@@ -534,4 +547,3 @@ namespace TS_Post_Database_Inserter
         Previous
     }
 }
- 
