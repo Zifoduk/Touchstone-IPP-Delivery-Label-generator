@@ -44,6 +44,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -96,6 +97,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Syroot.KnownFolders, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Syroot.Windows.IO.KnownFolders.1.1.0\lib\net452\Syroot.KnownFolders.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -204,7 +208,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\Books1.xlsx" />
+    <None Include="Resources\Label.lbx" />
     <None Include="Resources\SourceExcel.xlsx" />
+    <None Include="Resources\TS Inserter Manual DOCX.docx" />
+    <None Include="Resources\TS Inserter Manual PDF.pdf" />
+    <None Include="Resources\TS Inserter Manual.docx" />
+    <None Include="Resources\TS Inserter Manual.pdf" />
     <None Include="TS Post Database Inserter_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

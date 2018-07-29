@@ -44,6 +44,12 @@
             this.OpenMDIRBTN = new System.Windows.Forms.Button();
             this.PDFNum = new System.Windows.Forms.Label();
             this.RefreshBtn = new System.Windows.Forms.Button();
+            this.sourceTree = new System.Windows.Forms.TreeView();
+            this.downloadsTree = new System.Windows.Forms.TreeView();
+            this.moveLeftBtn = new System.Windows.Forms.Button();
+            this.moveRightBtn = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -53,7 +59,7 @@
             // Launch
             // 
             this.Launch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.Launch.Location = new System.Drawing.Point(262, 254);
+            this.Launch.Location = new System.Drawing.Point(595, 431);
             this.Launch.Name = "Launch";
             this.Launch.Size = new System.Drawing.Size(75, 23);
             this.Launch.TabIndex = 2;
@@ -64,7 +70,7 @@
             // LpdfL
             // 
             this.LpdfL.AutoSize = true;
-            this.LpdfL.Location = new System.Drawing.Point(13, 162);
+            this.LpdfL.Location = new System.Drawing.Point(12, 91);
             this.LpdfL.Name = "LpdfL";
             this.LpdfL.Size = new System.Drawing.Size(57, 13);
             this.LpdfL.TabIndex = 1;
@@ -83,7 +89,7 @@
             // PHExcelL
             // 
             this.PHExcelL.AutoSize = true;
-            this.PHExcelL.Location = new System.Drawing.Point(13, 149);
+            this.PHExcelL.Location = new System.Drawing.Point(12, 78);
             this.PHExcelL.Name = "PHExcelL";
             this.PHExcelL.Size = new System.Drawing.Size(62, 13);
             this.PHExcelL.TabIndex = 1;
@@ -92,7 +98,7 @@
             // PDFL
             // 
             this.PDFL.AutoSize = true;
-            this.PDFL.Location = new System.Drawing.Point(13, 175);
+            this.PDFL.Location = new System.Drawing.Point(13, 104);
             this.PDFL.Name = "PDFL";
             this.PDFL.Size = new System.Drawing.Size(57, 13);
             this.PDFL.TabIndex = 1;
@@ -100,7 +106,7 @@
             // 
             // OpenMFol
             // 
-            this.OpenMFol.Location = new System.Drawing.Point(12, 110);
+            this.OpenMFol.Location = new System.Drawing.Point(149, 39);
             this.OpenMFol.Name = "OpenMFol";
             this.OpenMFol.Size = new System.Drawing.Size(131, 23);
             this.OpenMFol.TabIndex = 0;
@@ -111,7 +117,7 @@
             // MFol
             // 
             this.MFol.AutoSize = true;
-            this.MFol.Location = new System.Drawing.Point(13, 136);
+            this.MFol.Location = new System.Drawing.Point(13, 65);
             this.MFol.Name = "MFol";
             this.MFol.Size = new System.Drawing.Size(71, 13);
             this.MFol.TabIndex = 1;
@@ -120,7 +126,7 @@
             // SetupMasFold
             // 
             this.SetupMasFold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.SetupMasFold.Location = new System.Drawing.Point(206, 13);
+            this.SetupMasFold.Location = new System.Drawing.Point(539, 13);
             this.SetupMasFold.Name = "SetupMasFold";
             this.SetupMasFold.Size = new System.Drawing.Size(131, 23);
             this.SetupMasFold.TabIndex = 0;
@@ -131,7 +137,7 @@
             // CloseBtn
             // 
             this.CloseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.CloseBtn.Location = new System.Drawing.Point(16, 254);
+            this.CloseBtn.Location = new System.Drawing.Point(16, 431);
             this.CloseBtn.Name = "CloseBtn";
             this.CloseBtn.Size = new System.Drawing.Size(75, 23);
             this.CloseBtn.TabIndex = 2;
@@ -144,7 +150,7 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.Color.DarkRed;
-            this.label2.Location = new System.Drawing.Point(73, 39);
+            this.label2.Location = new System.Drawing.Point(406, 39);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(264, 13);
             this.label2.TabIndex = 4;
@@ -152,7 +158,7 @@
             // 
             // OpenMDIRBTN
             // 
-            this.OpenMDIRBTN.Location = new System.Drawing.Point(12, 81);
+            this.OpenMDIRBTN.Location = new System.Drawing.Point(12, 39);
             this.OpenMDIRBTN.Name = "OpenMDIRBTN";
             this.OpenMDIRBTN.Size = new System.Drawing.Size(131, 23);
             this.OpenMDIRBTN.TabIndex = 0;
@@ -163,7 +169,7 @@
             // PDFNum
             // 
             this.PDFNum.AutoSize = true;
-            this.PDFNum.Location = new System.Drawing.Point(13, 188);
+            this.PDFNum.Location = new System.Drawing.Point(12, 117);
             this.PDFNum.Name = "PDFNum";
             this.PDFNum.Size = new System.Drawing.Size(57, 13);
             this.PDFNum.TabIndex = 1;
@@ -171,7 +177,8 @@
             // 
             // RefreshBtn
             // 
-            this.RefreshBtn.Location = new System.Drawing.Point(153, 110);
+            this.RefreshBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.RefreshBtn.Location = new System.Drawing.Point(507, 433);
             this.RefreshBtn.Name = "RefreshBtn";
             this.RefreshBtn.Size = new System.Drawing.Size(82, 23);
             this.RefreshBtn.TabIndex = 0;
@@ -179,12 +186,76 @@
             this.RefreshBtn.UseVisualStyleBackColor = true;
             this.RefreshBtn.Click += new System.EventHandler(this.RefreshBtn_Click);
             // 
+            // sourceTree
+            // 
+            this.sourceTree.AllowDrop = true;
+            this.sourceTree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.sourceTree.Location = new System.Drawing.Point(16, 200);
+            this.sourceTree.Name = "sourceTree";
+            this.sourceTree.Size = new System.Drawing.Size(264, 225);
+            this.sourceTree.TabIndex = 5;
+            this.sourceTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.changedTreeSelected);
+            // 
+            // downloadsTree
+            // 
+            this.downloadsTree.AllowDrop = true;
+            this.downloadsTree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.downloadsTree.Location = new System.Drawing.Point(406, 200);
+            this.downloadsTree.Name = "downloadsTree";
+            this.downloadsTree.Size = new System.Drawing.Size(264, 225);
+            this.downloadsTree.TabIndex = 5;
+            this.downloadsTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.changedTreeSelected);
+            // 
+            // moveLeftBtn
+            // 
+            this.moveLeftBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.moveLeftBtn.Location = new System.Drawing.Point(301, 230);
+            this.moveLeftBtn.Name = "moveLeftBtn";
+            this.moveLeftBtn.Size = new System.Drawing.Size(82, 23);
+            this.moveLeftBtn.TabIndex = 0;
+            this.moveLeftBtn.Text = "<<";
+            this.moveLeftBtn.UseVisualStyleBackColor = true;
+            this.moveLeftBtn.Click += new System.EventHandler(this.moveLeftBtn_Click);
+            // 
+            // moveRightBtn
+            // 
+            this.moveRightBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.moveRightBtn.Location = new System.Drawing.Point(301, 272);
+            this.moveRightBtn.Name = "moveRightBtn";
+            this.moveRightBtn.Size = new System.Drawing.Size(82, 23);
+            this.moveRightBtn.TabIndex = 0;
+            this.moveRightBtn.Text = ">>";
+            this.moveRightBtn.UseVisualStyleBackColor = true;
+            this.moveRightBtn.Click += new System.EventHandler(this.moveRightBtn_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(16, 181);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(145, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "PDF List of files in main folder";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(403, 184);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(169, 13);
+            this.label4.TabIndex = 6;
+            this.label4.Text = "PDF List of files in download folder";
+            // 
             // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(349, 291);
+            this.ClientSize = new System.Drawing.Size(682, 468);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.downloadsTree);
+            this.Controls.Add(this.sourceTree);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CloseBtn);
@@ -196,6 +267,8 @@
             this.Controls.Add(this.MFol);
             this.Controls.Add(this.SetupMasFold);
             this.Controls.Add(this.OpenMDIRBTN);
+            this.Controls.Add(this.moveRightBtn);
+            this.Controls.Add(this.moveLeftBtn);
             this.Controls.Add(this.RefreshBtn);
             this.Controls.Add(this.OpenMFol);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -227,6 +300,12 @@
         private System.Windows.Forms.Label PDFNum;
         private System.Windows.Forms.Button RefreshBtn;
         private System.Windows.Forms.Button Launch;
+        private System.Windows.Forms.TreeView sourceTree;
+        private System.Windows.Forms.TreeView downloadsTree;
+        private System.Windows.Forms.Button moveLeftBtn;
+        private System.Windows.Forms.Button moveRightBtn;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
     }
 }
 

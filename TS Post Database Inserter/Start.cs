@@ -4,11 +4,13 @@ using System.Configuration;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using TS_Post_Database_Inserter.Properties;
 using NPOI.XSSF.UserModel;
+using Syroot.Windows.IO;
 
 namespace TS_Post_Database_Inserter
 {
@@ -26,11 +28,13 @@ namespace TS_Post_Database_Inserter
         public string Archives;
         public string Master;
 
+        public SelectedTree? selectedTree = null;
+
         private PdfReader reader;
 
-        public XSSFWorkbook Workbook;
-        public XSSFSheet WorkSheet;
-        public FileStream Filestream;
+        public XSSFWorkbook masterWorkbook;
+        public XSSFSheet masterSheet;
+        public FileStream masterFileStream;
 
         public Start()
         {
@@ -38,15 +42,14 @@ namespace TS_Post_Database_Inserter
 
 
             //Testing
-            //Config.AppSettings.Settings["MasterExcel"].Value = "";
-            //Config.AppSettings.Settings["MainExcel"].Value = "";
-            //Config.AppSettings.Settings["OpenPDF"].Value = "";
-            //Config.AppSettings.Settings["Folder"].Value = "";
+            Config.AppSettings.Settings["MainExcel"].Value = "";
+            Config.AppSettings.Settings["OpenPDF"].Value = "";
+            Config.AppSettings.Settings["Folder"].Value = "";
 
             //File Settings location
             Folder = Config.AppSettings.Settings["Folder"].Value;
 
-            FindFiles(false);
+            FindFiles();
             if (!String.IsNullOrEmpty(Folder) || !Directory.Exists(Tempfolder) || !Directory.Exists(CurrentSrc))
                 Setup(Folder);
             CheckExcel();
@@ -67,7 +70,7 @@ namespace TS_Post_Database_Inserter
                     var mec = new MECheck(this, fb.SelectedPath, 0);
                     mec.ShowDialog();
                     Config.AppSettings.Settings["Folder"].Value = Folder;
-                    FindFiles(false);
+                    FindFiles();
                     CheckExcel();
                     UpdateUI();
                     SaveLocation();
@@ -78,7 +81,7 @@ namespace TS_Post_Database_Inserter
                     Config.AppSettings.Settings["Folder"].Value = Folder;
                     var mec = new MEC();
                     mec.ShowDialog();
-                    FindFiles(false);
+                    FindFiles();
                     CheckExcel();
                     UpdateUI();
                     SaveLocation();
@@ -105,13 +108,12 @@ namespace TS_Post_Database_Inserter
             else OpenPDFExists = false;
 
 
-            FindFiles(false);
+            FindFiles();
             
             if (!FolderExists || !OpenPDFExists || !MainExcelExists)
                 MessageBox.Show("Error 455: Cannot launch Edittor\r\nFix settings in RED", "Error 455",MessageBoxButtons.OK);
             else if (FolderExists && OpenPDFExists && MainExcelExists)
             {
-                Console.WriteLine("Folder: " + Folder + ", OpenPDF: " + OpenPDF + ", MainExcel: " + MainExcel);
                 LaunchMethod();
             }
 
@@ -151,38 +153,125 @@ namespace TS_Post_Database_Inserter
 
         internal void CheckExcel()
         {
-            try
+            if (!File.Exists(MasterExcel))
             {
-                if (!File.Exists(MasterExcel))
+                try
+                {
                     File.WriteAllBytes(MasterExcel, Resources.SourceExcel);
-                Filestream = new FileStream(MasterExcel, FileMode.Open, FileAccess.ReadWrite);
-                Workbook = new XSSFWorkbook(Filestream);
-                WorkSheet = Workbook.GetSheetAt(0) as XSSFSheet;
-            }
-            catch (Exception ex)
-            {
-                throw new ExcelDocumentOpenException(ex);
-            }
-            finally
-            {
-                Console.WriteLine("error passed");
+                }
+                catch
+                {
+                    if (Folder == "")
+                        throw new Exception("Failed to copy Source Excel to Master");
+                }
+                finally
+                {
+                    Console.WriteLine("Excel creating passed");
+                }
             }
 
-            Console.WriteLine(File.Exists(MainExcel));
-            if (File.Exists(MainExcel))
+
+            if (File.Exists(MainExcel) && File.Exists(MasterExcel))
             {
-                var creation = File.GetCreationTime(MainExcel);
-                var NewFile = Path.GetDirectoryName(Path.GetDirectoryName(MainExcel)) +
-                              @"\Archives\XLSX\" + DateTime.Now.ToString("yyyy_MM_dd") + " Archived" +
-                              Path.GetExtension(MainExcel);
-                if ((creation.Date - DateTime.Now.Date).TotalDays > 62)
+                var lastWriteTime = File.GetLastWriteTime(MainExcel);
+                var timeDifference = (TimeSpan)lastWriteTime.Subtract(DateTime.Now);
+                var differenceOfTime = (int) Math.Round(Math.Abs(timeDifference.TotalMinutes));
+
+
+                if (differenceOfTime > 30)
                 {
+                    /////Write to Master Excel for archive if main exists and is over time limit
+                    Int64 masterChecksize = 0;
+                    Int64 mainChecksize;
                     if (File.Exists(MasterExcel))
+                        masterChecksize = new FileInfo(MasterExcel).Length;
+                    if (File.Exists(MainExcel))
+                        mainChecksize = new FileInfo(MainExcel).Length;
+
+                    if (masterChecksize < 10)
                     {
-                        int Endrow = WorkSheet.PhysicalNumberOfRows;
+                        if (File.Exists(MasterExcel))
+                            File.Delete(MasterExcel);
+                        File.WriteAllBytes(Master + @"\Master.xlsx", Resources.SourceExcel);
                     }
-                    File.Move(MainExcel, NewFile);
-                    File.WriteAllBytes(MainExcel, Resources.SourceExcel);
+
+
+                    FileStream tempMasterFileStream = new FileStream(MasterExcel, FileMode.Open, FileAccess.ReadWrite);
+                    XSSFWorkbook masterWorkbook = new XSSFWorkbook(tempMasterFileStream);
+                    XSSFSheet masterSheet = masterWorkbook.GetSheetAt(0) as XSSFSheet;
+
+                    var copy = false;
+                    using (FileStream masterFileStream = new FileStream(MasterExcel, FileMode.Create, FileAccess.ReadWrite))
+                    {
+
+                        int masterMaxRow = masterSheet.PhysicalNumberOfRows;
+                        int masterCurrentRow = masterMaxRow;
+
+
+                        using (var mainFileStream = new FileStream(MainExcel, FileMode.Open, FileAccess.ReadWrite))
+                        {
+                            XSSFWorkbook mainWorkbook = new XSSFWorkbook(mainFileStream);
+                            if (mainWorkbook.GetSheetAt(0) is XSSFSheet mainSheet)
+                            {
+
+                                var mainRows = mainSheet.PhysicalNumberOfRows - 1;
+                                var mainColumns = mainSheet.GetRow(0).LastCellNum;
+                                if (mainRows > 0)
+                                {
+                                    copy = true;
+                                    for (int y = 1; y <= mainRows; y++)
+                                    {
+                                        var dontWrite = 0;
+                                        for (int i = 1; i < masterMaxRow; i++)
+                                        {
+                                            var barcodeCellContentMaster =
+                                                masterSheet.GetRow(i).GetCell(2).ToString();
+                                            var barcodeCellContentMain =
+                                                mainSheet.GetRow(y).GetCell(2).ToString();
+                                            if (barcodeCellContentMaster == barcodeCellContentMain)
+                                                dontWrite++;
+                                        }
+                                        if (dontWrite == 0)
+                                        {
+                                            masterSheet.CreateRow(masterCurrentRow);
+                                            for (int x = 0; x < mainColumns; x++)
+                                            {
+                                                masterSheet.GetRow(masterCurrentRow).CreateCell(x);
+                                                masterSheet.GetRow(masterCurrentRow).GetCell(x)
+                                                    .SetCellValue(mainSheet.GetRow(y).GetCell(x).ToString());
+                                            }
+
+                                            masterCurrentRow += 1;
+                                        }
+                                    }
+                                }
+                            }
+                            mainFileStream.Close();
+                            mainFileStream.Dispose();
+
+                        }
+                        masterFileStream.Close();
+                        masterFileStream.Dispose();
+                    }
+
+                    using (FileStream masterFileStream = new FileStream(MasterExcel, FileMode.Create, FileAccess.Write))
+                    {
+                        masterWorkbook.Write(masterFileStream);
+                    }
+
+
+
+                    ////Archieve mainexcel and recreate
+                    if (copy)
+                    {
+                        var newExcelArchiveFile = Path.GetDirectoryName(Path.GetDirectoryName(MainExcel)) +
+                                                  @"\Archives\XLSX\" + DateTime.Now.ToString("yyyy_MM_dd_HH-MM-ss") +
+                                                  " Archived" +
+                                                  Path.GetExtension(MainExcel);
+                        File.Move(MainExcel, newExcelArchiveFile);
+                        File.WriteAllBytes(MainExcel, Resources.SourceExcel);
+                    }
+                    copy = false;
                 }
             }
             else
@@ -201,9 +290,10 @@ namespace TS_Post_Database_Inserter
                     Console.WriteLine("Excel creating passed");
                 }
             }
+
         }
 
-        private void FindFiles(bool create)
+        private void FindFiles()
         {
             CurrentSrc = Folder + @"\Insert Label PDFs to edit";
             Tempfolder = Folder + @"\temp";
@@ -212,40 +302,38 @@ namespace TS_Post_Database_Inserter
             Archives = Folder + @"\Archives";
             Master = Folder + @"\Master";
             MasterExcel = Master + @"\Master.xlsx";
-            if (create)
-                SortPDFS();
         }
 
-        private void SortPDFS()
+        private void MoveSrc()
         {
-            var srcPDF = CurrentSrc + @"\src.pdf";
+            var srcPdf = CurrentSrc + @"\src.pdf";
             PdfReader.unethicalreading = true;
-            var CheckFilesTemp = new List<string>();
 
             var newSrc = Tempfolder + @"\src" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm") + ".pdf";
-            foreach (var files in Directory.GetFiles(CurrentSrc))
-                if (files.Contains(".pdf"))
-                    CheckFilesTemp.Add(files);
-
-            bool next = false;
-            if (File.Exists(srcPDF) && CheckFilesTemp.Count > 1)
+            
+            if (File.Exists(srcPdf))
             {
                 if (!Directory.Exists(Tempfolder))
                     Directory.CreateDirectory(Tempfolder);
-                next = true;
+                File.Move(srcPdf, newSrc);
+                if (File.Exists(newSrc))
+                    Console.WriteLine("newSrc Exists");
             }
+        }
 
-            if (next)
-            {
-                File.Move(srcPDF, newSrc);
-                next = false;
-            }
+        private void AggregatePdfs()
+        {
+            var srcPdf = CurrentSrc + @"\src.pdf";
+            PdfReader.unethicalreading = true;
+
+            var checkFilesTemp = new List<string>();
+            foreach (var files in Directory.GetFiles(CurrentSrc))
+                if (files.Contains(".pdf"))
+                    checkFilesTemp.Add(files);
 
             try
             {
-
-
-                if (Directory.Exists(CurrentSrc) && !CheckFilesTemp.Contains("src.pdf") && CheckFilesTemp.Count > 0)
+                if (Directory.Exists(CurrentSrc) && !checkFilesTemp.Contains("src.pdf") && checkFilesTemp.Count > 0)
                 {
                     using (var stream = new MemoryStream())
                     {
@@ -255,21 +343,17 @@ namespace TS_Post_Database_Inserter
                             doc.Open();
 
                             PdfReader reader = null;
-                            PdfImportedPage page = null;
+                            var filesTemp = Directory.GetFiles(CurrentSrc).Where(File => File.Contains(".pdf")).ToList();
 
-                            var FilesTemp = new List<string>();
-                            foreach (var Files in Directory.GetFiles(CurrentSrc))
-                                if (Files.Contains(".pdf"))
-                                    FilesTemp.Add(Files);
                             try
                             {
-                                if (FilesTemp.Count > 0)
-                                    foreach (var file in FilesTemp)
+                                if (filesTemp.Count > 0)
+                                    foreach (var file in filesTemp)
                                     {
                                         reader = new PdfReader(file);
                                         for (var i = 0; i < reader.NumberOfPages; i++)
                                         {
-                                            Console.WriteLine(i);
+                                            PdfImportedPage page = null;
                                             page = pdf.GetImportedPage(reader, i + 1);
                                             pdf.AddPage(page);
                                         }
@@ -295,7 +379,7 @@ namespace TS_Post_Database_Inserter
 
                         }
 
-                        using (var streamX = new FileStream(srcPDF, FileMode.Create))
+                        using (var streamX = new FileStream(srcPdf, FileMode.Create))
                         {
                             stream.WriteTo(streamX);
                             streamX.Close();
@@ -303,12 +387,7 @@ namespace TS_Post_Database_Inserter
 
                         stream.Close();
                     }
-
-                  
                 }
-
-                Console.WriteLine(CheckFilesTemp.Count);
-                Console.WriteLine("After");
 
             }
             catch (Exception ee)
@@ -344,6 +423,19 @@ namespace TS_Post_Database_Inserter
 
         private void UpdateUI()
         {
+            sourceTree.Nodes.Clear();
+            downloadsTree.Nodes.Clear();
+            DirectoryInfo directoryInfo = null;
+            
+            directoryInfo = new DirectoryInfo(KnownFolders.Downloads.Path);
+            foreach (FileInfo fileInfo in directoryInfo.GetFiles())
+            {
+                TreeNode d_fileNode = new TreeNode();
+                d_fileNode.Text = fileInfo.Name;
+                if (fileInfo.Name.Contains(".pdf"))
+                    downloadsTree.Nodes.Add(d_fileNode);
+            }
+
             var CheckFilesTemp = new List<string>();
             foreach (var files in Directory.GetFiles(CurrentSrc))
                 if (files.Contains(".pdf"))
@@ -351,8 +443,32 @@ namespace TS_Post_Database_Inserter
 
             if (Folder != "")
             {
+
                 MFol.Text = Folder;
                 MFol.ForeColor = Color.Black;
+                if (Directory.Exists(CurrentSrc))
+                {
+                    directoryInfo = new DirectoryInfo(CurrentSrc);
+                    foreach (FileInfo fileInfo in directoryInfo.GetFiles())
+                    {
+                        TreeNode fileNode = new TreeNode();
+                        fileNode.Text = fileInfo.Name;
+                        fileNode.ImageIndex = 0;
+                        fileNode.SelectedImageIndex = 0;
+                        if (fileInfo.Name.Contains(".pdf"))
+                            sourceTree.Nodes.Add(fileNode);
+                    }
+                }
+                else
+                {
+                    
+                    TreeNode fileNode = new TreeNode();
+                    fileNode.Text = "error folder not found";
+                    sourceTree.Nodes.Add(fileNode);
+                    
+                }
+                    ///downloads tree
+                //webBrowser1.Document.GetElementById("menu").Style = "display:none";
                 PHExcelL.Text = MainExcel;
                 PHExcelL.ForeColor = Color.Black;
 
@@ -367,6 +483,8 @@ namespace TS_Post_Database_Inserter
                             LpdfL.ForeColor = Color.Black;
                             reader = new PdfReader(OpenPDF);
                             PDFL.Text = "Number of Labels found: " + reader.NumberOfPages;
+                            reader.Dispose();
+                            reader.Close();
                         }
                         else
                         {
@@ -424,32 +542,34 @@ namespace TS_Post_Database_Inserter
             var folderBrowser = folderBrowserDialog1;
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
-                Console.WriteLine("First check: " + folderBrowser.SelectedPath);
                 folder = folderBrowser.SelectedPath;
-                Console.WriteLine("Second check: " + folder);
                 Setup(folder);
+                DialogResult changeFolderDialoge = MessageBox.Show("Do you want to set the new master folder as the default?", "Set as default", MessageBoxButtons.YesNo);
+                if (changeFolderDialoge == DialogResult.Yes)
+                {
+                    Folder = folder;
+                    FindFiles();
+                    UpdateUI();
+                }
             }
-            Console.WriteLine("Third check: " + folder);
-
-            DialogResult changeFolderDialoge = MessageBox.Show("Do you want to set the new master folder as the default?", "Set as default", MessageBoxButtons.YesNo);
-            if (changeFolderDialoge == DialogResult.Yes)
-            {
-                Folder = folder;
-                Console.WriteLine("Folder: " + Folder);
-                FindFiles(false);
-                UpdateUI();
-            }
-
         }
 
         private void Setup(String folder)
         {
-            Directory.CreateDirectory(folder + @"\Insert Label PDFs to edit");
-            Directory.CreateDirectory(folder + @"\temp");
-            Directory.CreateDirectory(folder + @"\Archives");
-            Directory.CreateDirectory(folder + @"\Archives\PDF");
-            Directory.CreateDirectory(folder + @"\Archives\XLSX");
-            Directory.CreateDirectory(folder + @"\Master");
+            if(!Directory.Exists(folder + @"\Insert Label PDFs to edit"))
+                Directory.CreateDirectory(folder + @"\Insert Label PDFs to edit");
+            if (!Directory.Exists(folder + @"\temp"))
+                Directory.CreateDirectory(folder + @"\temp");
+            if (!Directory.Exists(folder + @"\Archives"))
+                Directory.CreateDirectory(folder + @"\Archives");
+            if (!Directory.Exists(folder + @"\Archives\PDF"))
+                Directory.CreateDirectory(folder + @"\Archives\PDF");
+            if (!Directory.Exists(folder + @"\Archives\XLSX"))
+                Directory.CreateDirectory(folder + @"\Archives\XLSX");
+            if (!Directory.Exists(folder + @"\Master"))
+                Directory.CreateDirectory(folder + @"\Master");
+            if (!File.Exists(folder + @"\Label.lbx"))
+                File.WriteAllBytes(folder + @"\Label.lbx", Resources.Label);
         }
 
         private void CloseBtn_Click(object sender, EventArgs e)
@@ -461,8 +581,14 @@ namespace TS_Post_Database_Inserter
         {
             if (Folder != null || Folder != "")
             {
-                try{Process.Start(Folder);}
-                catch (Exception ee){throw new Exception("Failed to open folder", ee);}
+                try
+                {
+                    Process.Start(Folder);
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show("Master Folder isnt selected");
+                }
             }
         }
 
@@ -473,14 +599,12 @@ namespace TS_Post_Database_Inserter
                     "Check your labels", MessageBoxButtons.YesNo);
             if (CheckCorrectPDFsInFolder == DialogResult.Yes)
             {
-                DialogResult Sure =
-                    MessageBox.Show("Are you sure?",
-                        "Are you sure you have checked your labels", MessageBoxButtons.YesNo);
-                if (Sure == DialogResult.Yes)
-                { 
-                    FindFiles(true);
-                    UpdateUI();
-                }
+                MoveSrc();
+                FindFiles();
+                CheckExcel();
+                AggregatePdfs();
+                UpdateUI();
+                
             }
 
         }
@@ -501,5 +625,71 @@ namespace TS_Post_Database_Inserter
 
             Config.Save(ConfigurationSaveMode.Full, true);
         }
+
+        private void moveLeftBtn_Click(object sender, EventArgs e)
+        {
+            if (selectedTree == SelectedTree.downloads)
+            {
+                var fileName = downloadsTree.SelectedNode.Text;
+                var fileFullDirec = (KnownFolders.Downloads.Path + @"\" + fileName);
+                Console.WriteLine(fileFullDirec);
+                var newSrcFileName = (CurrentSrc + @"\" + fileName);
+                if (!File.Exists(newSrcFileName))
+                {
+                    Console.WriteLine("Okay");
+                    File.Move(fileFullDirec, newSrcFileName);
+                    UpdateUI();
+                }
+                else
+                {
+                    Console.WriteLine("Fail");
+                    MessageBox.Show("Cant move, File already exists in source folder", "Error", MessageBoxButtons.OK);
+                    UpdateUI();
+                }
+            }
+        }
+
+        private void moveRightBtn_Click(object sender, EventArgs e)
+        {
+            if (selectedTree == SelectedTree.source)
+            {
+                var fileName = sourceTree.SelectedNode.Text;
+                var fileFullDirec = (CurrentSrc + @"\" + fileName);
+                Console.WriteLine(fileFullDirec);
+                var newDownFileName = (KnownFolders.Downloads.Path + @"\" + fileName);
+                if (!File.Exists(newDownFileName))
+                {
+                    Console.WriteLine("Okay");
+                    File.Move(fileFullDirec, newDownFileName);
+                    UpdateUI();
+                }
+                else
+                {
+                    Console.WriteLine("Fail");
+                    MessageBox.Show("Cant move, File already existsin downloads folder", "Error", MessageBoxButtons.OK);
+                    UpdateUI();
+                }
+            }
+        }
+
+        private void changedTreeSelected(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeView obj = sender as TreeView;
+            Console.WriteLine(obj.Name);
+            if (obj.Name == "sourceTree")
+            {
+                selectedTree = SelectedTree.source;
+            }
+            else if (obj.Name == "downloadsTree")
+            {
+                selectedTree = SelectedTree.downloads;
+            }
+        }
+    }
+    public enum SelectedTree
+    {
+        downloads,
+        source
+        
     }
 }

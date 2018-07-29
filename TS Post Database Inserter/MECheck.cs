@@ -20,7 +20,6 @@ namespace TS_Post_Database_Inserter
             string master = "Do you want to change the Master Folder?";
             label1.Text = master;
             st = f;
-            Console.WriteLine(h);
             FName = h;
         }
 

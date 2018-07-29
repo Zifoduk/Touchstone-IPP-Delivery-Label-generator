@@ -124,4 +124,13 @@
   <data name="SourceExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SourceExcel.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Label" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Label.lbx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="TS_Inserter_Manual_DOCX" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TS Inserter Manual DOCX.docx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="TS_Inserter_Manual_PDF" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TS Inserter Manual PDF.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

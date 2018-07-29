@@ -75,6 +75,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_5955E4CFF76B154A107A043CDB26CCA5"
+        "OwnerKey" = "8:_4FE897AFE0234AFEA2D6A29C4FB4CE8C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_5C982AB93E5A45EBA407E2D9AFC04BF6"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -87,8 +93,38 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_6B1575A3B88D477A89DC6BD8C92FECF2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_838461845EBA4FDBA64A19223434488A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8871A0B6E06243B4B8FAC7621CA64D47"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_8DCA2BE73773559EF79305662D6A1DE3"
         "OwnerKey" = "8:_4FE897AFE0234AFEA2D6A29C4FB4CE8C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_8F660812B6B44C20B1BB74856E9C5442"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_988BE7C09FD04AE1A84B279974694F57"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -101,6 +137,12 @@
         {
         "MsmKey" = "8:_9E31B57E1D1138419AEBCCEAE4A49EE6"
         "OwnerKey" = "8:_4FE897AFE0234AFEA2D6A29C4FB4CE8C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A5B74ABED6AC40E685C21469596D1907"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -148,12 +190,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_DFEEF385228455DE2D43D8B5045AED72"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4FE897AFE0234AFEA2D6A29C4FB4CE8C"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -161,6 +197,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_8DCA2BE73773559EF79305662D6A1DE3"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_5955E4CFF76B154A107A043CDB26CCA5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -217,6 +259,12 @@
         "OwnerKey" = "8:_BF61815A810947D076A839B934A966D7"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_DFEEF385228455DE2D43D8B5045AED72"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -235,6 +283,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
         "Release"
         {
@@ -251,6 +307,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -404,6 +468,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5955E4CFF76B154A107A043CDB26CCA5"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Syroot.KnownFolders, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_5955E4CFF76B154A107A043CDB26CCA5"
+                    {
+                    "Name" = "8:Syroot.KnownFolders.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Syroot.KnownFolders.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_8B6760BBF4104ADDB3FD39C6BDDF133A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5C982AB93E5A45EBA407E2D9AFC04BF6"
             {
             "SourcePath" = "8:..\\..\\..\\..\\Dropbox\\A Touchstone Freight Services\\1.9 Programs\\Inserter\\Graphics\\Final\\icon_lPk_icon.ico"
@@ -455,6 +550,66 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B1575A3B88D477A89DC6BD8C92FECF2"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Dropbox\\A Touchstone Freight Services\\1.9 Programs\\Inserter\\Documentation\\TS Inserter Manual PDF.pdf"
+            "TargetName" = "8:TS Inserter Manual PDF.pdf"
+            "Tag" = "8:"
+            "Folder" = "8:_1ADE4B841E444A51979EBED9A257FA9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_838461845EBA4FDBA64A19223434488A"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Dropbox\\A Touchstone Freight Services\\1.9 Programs\\Inserter\\Documentation\\TS Inserter Manual DOCX.docx"
+            "TargetName" = "8:TS Inserter Manual DOCX.docx"
+            "Tag" = "8:"
+            "Folder" = "8:_8B6760BBF4104ADDB3FD39C6BDDF133A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8871A0B6E06243B4B8FAC7621CA64D47"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Dropbox\\A Touchstone Freight Services\\1.9 Programs\\Inserter\\Documentation\\TS Inserter Manual PDF.pdf"
+            "TargetName" = "8:TS Inserter Manual PDF.pdf"
+            "Tag" = "8:"
+            "Folder" = "8:_66B551DF9B9D45DEBCAFBDEF605A3CC7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_8DCA2BE73773559EF79305662D6A1DE3"
             {
             "AssemblyRegister" = "3:1"
@@ -484,6 +639,46 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_8F660812B6B44C20B1BB74856E9C5442"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Dropbox\\A Touchstone Freight Services\\1.9 Programs\\Inserter\\Documentation\\TS Inserter Manual PDF.pdf"
+            "TargetName" = "8:TS Inserter Manual PDF.pdf"
+            "Tag" = "8:"
+            "Folder" = "8:_8B6760BBF4104ADDB3FD39C6BDDF133A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_988BE7C09FD04AE1A84B279974694F57"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Dropbox\\A Touchstone Freight Services\\1.9 Programs\\Inserter\\Documentation\\TS Inserter Manual DOCX.docx"
+            "TargetName" = "8:TS Inserter Manual DOCX.docx"
+            "Tag" = "8:"
+            "Folder" = "8:_66B551DF9B9D45DEBCAFBDEF605A3CC7"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9DAF1D0CBB5C1E3CA42007D5C6DF5B9B"
@@ -546,6 +741,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_A5B74ABED6AC40E685C21469596D1907"
+            {
+            "SourcePath" = "8:..\\..\\..\\..\\Dropbox\\A Touchstone Freight Services\\1.9 Programs\\Inserter\\Documentation\\TS Inserter Manual DOCX.docx"
+            "TargetName" = "8:TS Inserter Manual DOCX.docx"
+            "Tag" = "8:"
+            "Folder" = "8:_1ADE4B841E444A51979EBED9A257FA9B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_BD2FFBA467D6CCE06EB91B324EB408C3"

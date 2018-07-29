@@ -156,7 +156,6 @@ namespace TS_Post_Database_Inserter
                 var tArr = pages.ResultArr;
                 for (var i = 0; i < tArr.Length; i++)
                 {
-                    Console.WriteLine(tArr[i].IndexOf("Next Day"));
                     if (tArr[i].IndexOf("Next Day") > -1)
                         x = i + 5;
                 }
@@ -418,7 +417,6 @@ namespace TS_Post_Database_Inserter
             }
 
             var CountRow = WorkSheet.PhysicalNumberOfRows;
-            Console.WriteLine("CR: " + CountRow);
             var i = 0;
             foreach (var pages in ResPages)
             {
@@ -429,7 +427,6 @@ namespace TS_Post_Database_Inserter
                 var NRow = i + CountRow;
                 WorkSheet.CreateRow(NRow);
                 var propertyInfos = new List<PropertyInfo>();
-                Console.WriteLine(NRow);
                 if (i < ResPages.Count)
                     propertyInfos.AddRange(pages.GetType().GetProperties().Where(prop => prop.PropertyType == typeof(string) && prop.Name != "PDFtext"));
                 

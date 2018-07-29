@@ -73,9 +73,39 @@ namespace TS_Post_Database_Inserter.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        public static byte[] Label {
+            get {
+                object obj = ResourceManager.GetObject("Label", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         public static byte[] SourceExcel {
             get {
                 object obj = ResourceManager.GetObject("SourceExcel", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] TS_Inserter_Manual_DOCX {
+            get {
+                object obj = ResourceManager.GetObject("TS_Inserter_Manual_DOCX", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] TS_Inserter_Manual_PDF {
+            get {
+                object obj = ResourceManager.GetObject("TS_Inserter_Manual_PDF", resourceCulture);
                 return ((byte[])(obj));
             }
         }
