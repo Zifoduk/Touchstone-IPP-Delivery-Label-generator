@@ -42,9 +42,9 @@ namespace TS_Post_Database_Inserter
 
 
             //Testing
-            Config.AppSettings.Settings["MainExcel"].Value = "";
+            /*Config.AppSettings.Settings["MainExcel"].Value = "";
             Config.AppSettings.Settings["OpenPDF"].Value = "";
-            Config.AppSettings.Settings["Folder"].Value = "";
+            Config.AppSettings.Settings["Folder"].Value = "";*/
 
             //File Settings location
             Folder = Config.AppSettings.Settings["Folder"].Value;
