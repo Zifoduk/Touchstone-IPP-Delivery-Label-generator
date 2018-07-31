@@ -35,6 +35,8 @@ namespace TS_Post_Database_Inserter
         public XSSFWorkbook masterWorkbook;
         public XSSFSheet masterSheet;
         public FileStream masterFileStream;
+        
+        public Completed _completed;
 
         public Start()
         {
