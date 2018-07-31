@@ -440,7 +440,6 @@ namespace TS_Post_Database_Inserter
                     }
                     cellnum++;
                 }
-
                 i++;
             }
 
