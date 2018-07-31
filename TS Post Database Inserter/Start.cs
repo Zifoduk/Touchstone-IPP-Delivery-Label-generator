@@ -687,6 +687,21 @@ namespace TS_Post_Database_Inserter
                 selectedTree = SelectedTree.downloads;
             }
         }
+        
+        public void openLbx
+        {
+            try
+            {
+            System.Diagnostics.Procress.Start(CurrentSrc + @"\Label.lbx");
+            Console.WriteLine("Check if process started");
+            }
+            catch(Exception ee)
+            {
+            Console.WriteLine("Inner: "ee.InnerException + ", Exception: " + ee);
+            throw;
+            }
+        }
+        
     }
     public enum SelectedTree
     {
