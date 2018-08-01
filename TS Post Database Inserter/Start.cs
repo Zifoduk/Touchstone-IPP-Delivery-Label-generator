@@ -559,8 +559,21 @@ namespace TS_Post_Database_Inserter
 
         private void Setup(String folder)
         {
-        string _L[] = {@"\Insert Label PDFs to edit", @"\temp", @"\Archives", @"\Archives\PDF", @"\Archives\XLSX", @"\Master",               @"\Label.lbx"} 
-            if(!Directory.Exists(folder + @"\Insert Label PDFs to edit"))
+            var _directories[] = new string[] {@"\Insert Label PDFs to edit", @"\temp", @"\Archives", @"\Archives\PDF", @"\Archives\XLSX", @"\Master"};
+            var _labelFiles = (string)(@"/Label.lbx");
+            
+            foreach (var l in _directories)
+            {
+            if(!Directory.Exists(folder + l))
+                {
+                Directory.CreateDirectory(folder + l);
+                }
+            {
+            
+            if(File.Exists(folder + _labelFiles))
+                File.WriteAllBytes(folder + _labelFiles);
+                
+            /*if(!Directory.Exists(folder + @"\Insert Label PDFs to edit"))
                 Directory.CreateDirectory(folder + @"\Insert Label PDFs to edit");
             if (!Directory.Exists(folder + @"\temp"))
                 Directory.CreateDirectory(folder + @"\temp");
@@ -573,7 +586,7 @@ namespace TS_Post_Database_Inserter
             if (!Directory.Exists(folder + @"\Master"))
                 Directory.CreateDirectory(folder + @"\Master");
             if (!File.Exists(folder + @"\Label.lbx"))
-                File.WriteAllBytes(folder + @"\Label.lbx", Resources.Label);
+                File.WriteAllBytes(folder + @"\Label.lbx", Resources.Label);*/
         }
 
         private void CloseBtn_Click(object sender, EventArgs e)
