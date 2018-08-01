@@ -484,6 +484,7 @@ namespace TS_Post_Database_Inserter
                             LpdfL.Text = OpenPDF;
                             LpdfL.ForeColor = Color.Black;
                             reader = new PdfReader(OpenPDF);
+                            PDFL.ForeColor = Color.Black;
                             PDFL.Text = "Number of Labels found: " + reader.NumberOfPages;
                             reader.Dispose();
                             reader.Close();
@@ -558,6 +559,7 @@ namespace TS_Post_Database_Inserter
 
         private void Setup(String folder)
         {
+        string _L[] = {@"\Insert Label PDFs to edit", @"\temp", @"\Archives", @"\Archives\PDF", @"\Archives\XLSX", @"\Master",               @"\Label.lbx"} 
             if(!Directory.Exists(folder + @"\Insert Label PDFs to edit"))
                 Directory.CreateDirectory(folder + @"\Insert Label PDFs to edit");
             if (!Directory.Exists(folder + @"\temp"))
