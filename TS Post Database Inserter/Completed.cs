@@ -33,6 +33,7 @@ namespace TS_Post_Database_Inserter
         private void OKBtn_Click(object sender, EventArgs e)
         {
             this.Close();
+            CustomerInfo.Start.OpenLBX();
         }
     }
 }

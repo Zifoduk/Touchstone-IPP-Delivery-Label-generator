@@ -35,6 +35,8 @@ namespace TS_Post_Database_Inserter
         public XSSFWorkbook masterWorkbook;
         public XSSFSheet masterSheet;
         public FileStream masterFileStream;
+        
+        public Completed _completed;
 
         public Start()
         {
@@ -480,6 +482,7 @@ namespace TS_Post_Database_Inserter
                             LpdfL.Text = OpenPDF;
                             LpdfL.ForeColor = Color.Black;
                             reader = new PdfReader(OpenPDF);
+                            PDFL.ForeColor = Color.Black;
                             PDFL.Text = "Number of Labels found: " + reader.NumberOfPages;
                             reader.Dispose();
                             reader.Close();
@@ -554,7 +557,21 @@ namespace TS_Post_Database_Inserter
 
         private void Setup(String folder)
         {
-            if(!Directory.Exists(folder + @"\Insert Label PDFs to edit"))
+            var _directories[] = new string[] {@"\Insert Label PDFs to edit", @"\temp", @"\Archives", @"\Archives\PDF", @"\Archives\XLSX", @"\Master"};
+            var _labelFiles = (string)(@"/Label.lbx");
+            
+            foreach (var l in _directories)
+            {
+            if(!Directory.Exists(folder + l))
+                {
+                Directory.CreateDirectory(folder + l);
+                }
+            {
+            
+            if(File.Exists(folder + _labelFiles))
+                File.WriteAllBytes(folder + _labelFiles);
+                
+            /*if(!Directory.Exists(folder + @"\Insert Label PDFs to edit"))
                 Directory.CreateDirectory(folder + @"\Insert Label PDFs to edit");
             if (!Directory.Exists(folder + @"\temp"))
                 Directory.CreateDirectory(folder + @"\temp");
@@ -567,7 +584,7 @@ namespace TS_Post_Database_Inserter
             if (!Directory.Exists(folder + @"\Master"))
                 Directory.CreateDirectory(folder + @"\Master");
             if (!File.Exists(folder + @"\Label.lbx"))
-                File.WriteAllBytes(folder + @"\Label.lbx", Resources.Label);
+                File.WriteAllBytes(folder + @"\Label.lbx", Resources.Label);*/
         }
 
         private void CloseBtn_Click(object sender, EventArgs e)
@@ -683,6 +700,21 @@ namespace TS_Post_Database_Inserter
                 selectedTree = SelectedTree.downloads;
             }
         }
+        
+        public void openLbx
+        {
+            try
+            {
+            System.Diagnostics.Procress.Start(CurrentSrc + @"\Label.lbx");
+            Console.WriteLine("Check if process started");
+            }
+            catch(Exception ee)
+            {
+            Console.WriteLine("Inner: "ee.InnerException + ", Exception: " + ee);
+            throw;
+            }
+        }
+        
     }
     public enum SelectedTree
     {
