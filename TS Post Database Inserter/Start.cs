@@ -50,7 +50,7 @@ namespace TS_Post_Database_Inserter
             Folder = Config.AppSettings.Settings["Folder"].Value;
 
             FindFiles();
-            if (!String.IsNullOrEmpty(Folder) || !Directory.Exists(Tempfolder) || !Directory.Exists(CurrentSrc))
+            if ((!String.IsNullOrEmpty(Folder) && Directory.Exists(Folder)) && (!Directory.Exists(Tempfolder) || !Directory.Exists(CurrentSrc)))
                 Setup(Folder);
             CheckExcel();
 
@@ -147,9 +147,6 @@ namespace TS_Post_Database_Inserter
         {
             SaveLocation();
         }
-
-
-        ///////////////////////////////
 
         internal void CheckExcel()
         {
@@ -437,11 +434,12 @@ namespace TS_Post_Database_Inserter
             }
 
             var CheckFilesTemp = new List<string>();
-            foreach (var files in Directory.GetFiles(CurrentSrc))
-                if (files.Contains(".pdf"))
-                    CheckFilesTemp.Add(files);
+            if(Directory.Exists(CurrentSrc))
+                foreach (var files in Directory.GetFiles(CurrentSrc))
+                    if (files.Contains(".pdf"))
+                        CheckFilesTemp.Add(files);
 
-            if (Folder != "")
+            if (Folder != "" && Directory.Exists(Folder))
             {
 
                 MFol.Text = Folder;
