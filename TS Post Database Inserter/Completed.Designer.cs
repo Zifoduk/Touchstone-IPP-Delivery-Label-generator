@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Completed));
             this.OKBtn = new System.Windows.Forms.Button();
             this.OnScreenText = new System.Windows.Forms.Label();
             this.Progressbar = new System.Windows.Forms.ProgressBar();
@@ -37,7 +36,7 @@
             // OKBtn
             // 
             this.OKBtn.Enabled = false;
-            this.OKBtn.Location = new System.Drawing.Point(223, 82);
+            this.OKBtn.Location = new System.Drawing.Point(238, 82);
             this.OKBtn.Name = "OKBtn";
             this.OKBtn.Size = new System.Drawing.Size(75, 23);
             this.OKBtn.TabIndex = 0;
@@ -50,17 +49,17 @@
             this.OnScreenText.AutoSize = true;
             this.OnScreenText.Location = new System.Drawing.Point(10, 14);
             this.OnScreenText.Name = "OnScreenText";
-            this.OnScreenText.Size = new System.Drawing.Size(301, 65);
+            this.OnScreenText.Size = new System.Drawing.Size(122, 13);
             this.OnScreenText.TabIndex = 1;
-            this.OnScreenText.Text = resources.GetString("OnScreenText.Text");
+            this.OnScreenText.Text = "Text will change by itself";
             this.OnScreenText.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // Progressbar
             // 
-            this.Progressbar.Location = new System.Drawing.Point(12, 82);
+            this.Progressbar.Location = new System.Drawing.Point(25, 88);
             this.Progressbar.Maximum = 200;
             this.Progressbar.Name = "Progressbar";
-            this.Progressbar.Size = new System.Drawing.Size(205, 23);
+            this.Progressbar.Size = new System.Drawing.Size(205, 10);
             this.Progressbar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.Progressbar.TabIndex = 2;
             // 
@@ -79,6 +78,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Completed";
+            this.Shown += new System.EventHandler(this.Completed_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

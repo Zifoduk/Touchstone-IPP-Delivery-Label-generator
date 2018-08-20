@@ -38,18 +38,16 @@
             this.OpenMFol = new System.Windows.Forms.Button();
             this.MFol = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.SetupMasFold = new System.Windows.Forms.Button();
             this.CloseBtn = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.OpenMDIRBTN = new System.Windows.Forms.Button();
             this.PDFNum = new System.Windows.Forms.Label();
-            this.RefreshBtn = new System.Windows.Forms.Button();
             this.sourceTree = new System.Windows.Forms.TreeView();
             this.downloadsTree = new System.Windows.Forms.TreeView();
             this.moveLeftBtn = new System.Windows.Forms.Button();
             this.moveRightBtn = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.WaitLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -70,7 +68,7 @@
             // LpdfL
             // 
             this.LpdfL.AutoSize = true;
-            this.LpdfL.Location = new System.Drawing.Point(12, 91);
+            this.LpdfL.Location = new System.Drawing.Point(12, 104);
             this.LpdfL.Name = "LpdfL";
             this.LpdfL.Size = new System.Drawing.Size(57, 13);
             this.LpdfL.TabIndex = 1;
@@ -89,7 +87,7 @@
             // PHExcelL
             // 
             this.PHExcelL.AutoSize = true;
-            this.PHExcelL.Location = new System.Drawing.Point(12, 78);
+            this.PHExcelL.Location = new System.Drawing.Point(12, 83);
             this.PHExcelL.Name = "PHExcelL";
             this.PHExcelL.Size = new System.Drawing.Size(62, 13);
             this.PHExcelL.TabIndex = 1;
@@ -98,7 +96,7 @@
             // PDFL
             // 
             this.PDFL.AutoSize = true;
-            this.PDFL.Location = new System.Drawing.Point(13, 104);
+            this.PDFL.Location = new System.Drawing.Point(13, 125);
             this.PDFL.Name = "PDFL";
             this.PDFL.Size = new System.Drawing.Size(57, 13);
             this.PDFL.TabIndex = 1;
@@ -123,17 +121,6 @@
             this.MFol.TabIndex = 1;
             this.MFol.Text = "Master Folder";
             // 
-            // SetupMasFold
-            // 
-            this.SetupMasFold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.SetupMasFold.Location = new System.Drawing.Point(539, 13);
-            this.SetupMasFold.Name = "SetupMasFold";
-            this.SetupMasFold.Size = new System.Drawing.Size(131, 23);
-            this.SetupMasFold.TabIndex = 0;
-            this.SetupMasFold.Text = "Setup a Master Folder";
-            this.SetupMasFold.UseVisualStyleBackColor = true;
-            this.SetupMasFold.Click += new System.EventHandler(this.SetupMasFod_Click);
-            // 
             // CloseBtn
             // 
             this.CloseBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -144,17 +131,6 @@
             this.CloseBtn.Text = "Close";
             this.CloseBtn.UseVisualStyleBackColor = true;
             this.CloseBtn.Click += new System.EventHandler(this.CloseBtn_Click);
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.AutoSize = true;
-            this.label2.ForeColor = System.Drawing.Color.DarkRed;
-            this.label2.Location = new System.Drawing.Point(406, 39);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(264, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "ONLY CLICK IF YOU UNDERSTAND ITS FUNCTION";
             // 
             // OpenMDIRBTN
             // 
@@ -169,42 +145,29 @@
             // PDFNum
             // 
             this.PDFNum.AutoSize = true;
-            this.PDFNum.Location = new System.Drawing.Point(12, 117);
+            this.PDFNum.Location = new System.Drawing.Point(12, 145);
             this.PDFNum.Name = "PDFNum";
             this.PDFNum.Size = new System.Drawing.Size(57, 13);
             this.PDFNum.TabIndex = 1;
             this.PDFNum.Text = "Label PDF";
             // 
-            // RefreshBtn
-            // 
-            this.RefreshBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.RefreshBtn.Location = new System.Drawing.Point(507, 433);
-            this.RefreshBtn.Name = "RefreshBtn";
-            this.RefreshBtn.Size = new System.Drawing.Size(82, 23);
-            this.RefreshBtn.TabIndex = 0;
-            this.RefreshBtn.Text = "Refresh";
-            this.RefreshBtn.UseVisualStyleBackColor = true;
-            this.RefreshBtn.Click += new System.EventHandler(this.RefreshBtn_Click);
-            // 
             // sourceTree
             // 
-            this.sourceTree.AllowDrop = true;
             this.sourceTree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.sourceTree.Location = new System.Drawing.Point(16, 200);
             this.sourceTree.Name = "sourceTree";
             this.sourceTree.Size = new System.Drawing.Size(264, 225);
             this.sourceTree.TabIndex = 5;
-            this.sourceTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.changedTreeSelected);
+            this.sourceTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.ChangedTreeSelected);
             // 
             // downloadsTree
             // 
-            this.downloadsTree.AllowDrop = true;
             this.downloadsTree.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.downloadsTree.Location = new System.Drawing.Point(406, 200);
             this.downloadsTree.Name = "downloadsTree";
             this.downloadsTree.Size = new System.Drawing.Size(264, 225);
             this.downloadsTree.TabIndex = 5;
-            this.downloadsTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.changedTreeSelected);
+            this.downloadsTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.ChangedTreeSelected);
             // 
             // moveLeftBtn
             // 
@@ -215,7 +178,7 @@
             this.moveLeftBtn.TabIndex = 0;
             this.moveLeftBtn.Text = "<<";
             this.moveLeftBtn.UseVisualStyleBackColor = true;
-            this.moveLeftBtn.Click += new System.EventHandler(this.moveLeftBtn_Click);
+            this.moveLeftBtn.Click += new System.EventHandler(this.MoveLeftBtn_Click);
             // 
             // moveRightBtn
             // 
@@ -226,7 +189,7 @@
             this.moveRightBtn.TabIndex = 0;
             this.moveRightBtn.Text = ">>";
             this.moveRightBtn.UseVisualStyleBackColor = true;
-            this.moveRightBtn.Click += new System.EventHandler(this.moveRightBtn_Click);
+            this.moveRightBtn.Click += new System.EventHandler(this.MoveRightBtn_Click);
             // 
             // label3
             // 
@@ -246,17 +209,31 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "PDF List of files in download folder";
             // 
+            // WaitLabel
+            // 
+            this.WaitLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.WaitLabel.AutoSize = true;
+            this.WaitLabel.Enabled = false;
+            this.WaitLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 150F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WaitLabel.ForeColor = System.Drawing.Color.Crimson;
+            this.WaitLabel.Location = new System.Drawing.Point(100, 62);
+            this.WaitLabel.Name = "WaitLabel";
+            this.WaitLabel.Size = new System.Drawing.Size(495, 226);
+            this.WaitLabel.TabIndex = 7;
+            this.WaitLabel.Text = "Wait";
+            this.WaitLabel.Visible = false;
+            // 
             // Start
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(682, 468);
+            this.Controls.Add(this.WaitLabel);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.downloadsTree);
             this.Controls.Add(this.sourceTree);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.CloseBtn);
             this.Controls.Add(this.Launch);
@@ -265,11 +242,9 @@
             this.Controls.Add(this.LpdfL);
             this.Controls.Add(this.PHExcelL);
             this.Controls.Add(this.MFol);
-            this.Controls.Add(this.SetupMasFold);
             this.Controls.Add(this.OpenMDIRBTN);
             this.Controls.Add(this.moveRightBtn);
             this.Controls.Add(this.moveLeftBtn);
-            this.Controls.Add(this.RefreshBtn);
             this.Controls.Add(this.OpenMFol);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -293,12 +268,9 @@
         private System.Windows.Forms.Button OpenMFol;
         public System.Windows.Forms.Label MFol;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.Button SetupMasFold;
         private System.Windows.Forms.Button CloseBtn;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button OpenMDIRBTN;
         private System.Windows.Forms.Label PDFNum;
-        private System.Windows.Forms.Button RefreshBtn;
         private System.Windows.Forms.Button Launch;
         private System.Windows.Forms.TreeView sourceTree;
         private System.Windows.Forms.TreeView downloadsTree;
@@ -306,6 +278,7 @@
         private System.Windows.Forms.Button moveRightBtn;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label WaitLabel;
     }
 }
 

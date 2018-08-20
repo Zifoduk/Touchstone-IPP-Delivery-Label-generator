@@ -16,7 +16,7 @@ namespace TS_Post_Database_Inserter
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Start());
+           Application.Run(new Start());
         }
     }
 }

@@ -117,11 +117,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="OnScreenText.Text" xml:space="preserve">
-    <value>Operations have finished.
-Will now return to start window.
-Recommended task: open P-Touch application and
-open the premade file called "LabelTemplate"
-Make sure database is setup correctly. For help contact Admin</value>
-  </data>
 </root>

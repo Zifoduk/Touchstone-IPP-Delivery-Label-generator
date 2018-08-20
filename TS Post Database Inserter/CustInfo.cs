@@ -23,12 +23,11 @@ namespace TS_Post_Database_Inserter
         private string OpenPDF = "";
 
         private readonly int MaxPg;
-        private int CurrentPg;
+        private int CurrentPage;
 
-        //g = currentpage - 1
-        public int g;
+        public int OffsetCurrentPage;
+        public Start start;
 
-        private readonly Start start;
         private readonly PdfReader reader;
         private readonly List<Pages> ResPages = new List<Pages>();
         private readonly List<CheckBox> listCheckBoxes = new List<CheckBox>();
@@ -36,6 +35,8 @@ namespace TS_Post_Database_Inserter
         public FileStream Filestream;
 
 
+
+        //Main Operations
 
         public CustInfo(Start f)
         {
@@ -58,7 +59,7 @@ namespace TS_Post_Database_Inserter
 
             reader = new PdfReader(start.OpenPDF);
             MaxPg = reader.NumberOfPages;
-            CurrentPg = 0;
+            CurrentPage = 0;
 
             ///////Init
             for (var i = 1; i <= reader.NumberOfPages; i++)
@@ -67,10 +68,16 @@ namespace TS_Post_Database_Inserter
                 var temp = PdfTextExtractor.GetTextFromPage(reader, i, new SimpleTextExtractionStrategy());
                 tempPG.PDFtext                              = temp;
                 tempPG.ResultArr                            = temp.Split(new[] {"\n"}, StringSplitOptions.RemoveEmptyEntries);
+
+
+                foreach(var s in tempPG.ResultArr)
+                    Console.WriteLine(s);
+
+
                 ResPages.Add(tempPG);
             }
 
-            //////Name
+            //Name
             foreach (var pages in ResPages)
             {
                 var x                                       = 0;
@@ -82,7 +89,7 @@ namespace TS_Post_Database_Inserter
                 pages.Name                                  = tArr[x];
             }
 
-            //////Address
+            //Address
             foreach (var pages in ResPages)
             {
                 var x                                       = 0;
@@ -101,7 +108,7 @@ namespace TS_Post_Database_Inserter
                 pages.Address = string.Join(",\r\n", tempAdArry.ToArray());
             }
 
-            ////////Barcode
+            //Barcode
             foreach (var pages in ResPages)
             {
                 var x                                       = 0;
@@ -113,7 +120,7 @@ namespace TS_Post_Database_Inserter
                 pages.Barcode                               = tArr[x];
             }
 
-            ////////Delivery Date
+            //Delivery Date
             foreach (var pages in ResPages)
             {
                 var x                                       = 0;
@@ -125,7 +132,7 @@ namespace TS_Post_Database_Inserter
                 pages.DeliveryDate                          = tArr[x];
             }
 
-            ////////Consignment Number
+            //Consignment Number
             foreach (var pages in ResPages)
             {
                 var x                                       = 0;
@@ -137,7 +144,7 @@ namespace TS_Post_Database_Inserter
                 pages.ConsignmentNumber                     = tArr[x];
             }
 
-            ////////PostCode
+            //PostCode
             foreach (var pages in ResPages)
             {
                 var x                                       = 0;
@@ -149,7 +156,7 @@ namespace TS_Post_Database_Inserter
                 pages.PostCode                              = tArr[x];
             }
 
-            ////////Tel
+            //Telephone Number
             foreach (var pages in ResPages)
             {
                 var x = 0;
@@ -163,34 +170,56 @@ namespace TS_Post_Database_Inserter
             pages.Telephone                             = tArr[x];
             }
 
-            ////////Location
+            //Location
             foreach (var pages in ResPages)
             {
-                var x                                       = 0;
-                var tArr                                    = pages.ResultArr;
-                x                                           = tArr.Length - 2;
-                pages.Location                              = tArr[x];
+                var x  = 0;
+                var tArr  = pages.ResultArr;
+                x = tArr.Length - 2;
+                pages.Location = tArr[x];
             }
 
-            ////////Location Number
+            //Location Number
             foreach (var pages in ResPages)
             {
-                var x                                       = 0;
-                var tArr                                    = pages.ResultArr;
-                x                                           = tArr.Length - 1;
-                pages.LocationNumber                        = tArr[x];
+                var x = 0;
+                var tArr = pages.ResultArr;
+                x = tArr.Length - 1;
+                pages.LocationNumber = tArr[x];
             }
 
-            ////////Parcel Number
+            //Parcel Number
             foreach (var pages in ResPages)
             {
-                var x                                       = 0;
-                var tArr                                    = pages.ResultArr;
-                for (var i                                  = 0; i < tArr.Length; i++)
+                var x = 0;
+                var tArr = pages.ResultArr;
+                for (var i = 0; i < tArr.Length; i++)
                     if (tArr[i].IndexOf("Next Day") > -1)
-                        x                                   = i + 4;
-                pages.ParcelNumber                          = tArr[x];
+                        x = i + 4;
+                pages.ParcelNumber = tArr[x];
             }
+
+            //Parcel Size
+            foreach (var pages in ResPages)
+            {
+                var x = 0;
+                var tArr = pages.ResultArr;
+                x = tArr.Length - 3;
+                pages.ParcelSize = tArr[x];
+            }
+            
+            //Weight
+            foreach (var pages in ResPages)
+            {
+                var x = 0;
+                var tArr = pages.ResultArr;
+                for (var i = 0; i < tArr.Length; i++)
+                    if (tArr[i].IndexOf("Next Day") > -1)
+                        x = i + 2;
+
+                pages.Weight = tArr[x];
+            }
+
 
             InfoUpdate(ChangePage.Start);
         }
@@ -200,29 +229,30 @@ namespace TS_Post_Database_Inserter
             //start
             if (changePage == ChangePage.Start)
             {
-                CurrentPg++;
-                g = CurrentPg - 1;
+                CurrentPage++;
+                OffsetCurrentPage = CurrentPage - 1;
+                ResPages[OffsetCurrentPage].CurrectCheckState = TickallCB.CheckState;
 
                 foreach (var c in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
-                    ResPages[g].CheckStates.Add(c.CheckState);
+                    ResPages[OffsetCurrentPage].CheckStates.Add(c.CheckState);
 
-                ResPages[g].IsViewed         = true;
+                ResPages[OffsetCurrentPage].IsViewed         = true;
 
-                NameTB.Text                  = ResPages[g].Name;
-                tabControl1.SelectedTab.Text = NameTB.Text + ", PDF page:" + CurrentPg;
-                PgNumL.Text                  = "Page: " + CurrentPg;
-                this.Text                    = NameTB.Text + ", PDF page:" + CurrentPg;
-                AddressTB.Text               = ResPages[g].Address;
-                BarTB.Text                   = ResPages[g].Barcode;
-                DelTB.Text                   = ResPages[g].DeliveryDate;
-                ConTB.Text                   = ResPages[g].ConsignmentNumber;
-                PostTB.Text                  = ResPages[g].PostCode;
-                TelTB.Text                   = ResPages[g].Telephone;
-                LocatTB.Text                 = ResPages[g].Location;
-                LocatNoTB.Text               = ResPages[g].LocationNumber;
-                ParcelTB.Text                = ResPages[g].ParcelNumber;
+                NameTB.Text                  = ResPages[OffsetCurrentPage].Name;
+                tabControl1.SelectedTab.Text = NameTB.Text + ", PDF page:" + CurrentPage;
+                PgNumL.Text                  = "Page: " + CurrentPage;
+                this.Text                    = NameTB.Text + ", PDF page:" + CurrentPage;
+                AddressTB.Text               = ResPages[OffsetCurrentPage].Address;
+                BarTB.Text                   = ResPages[OffsetCurrentPage].Barcode;
+                DelTB.Text                   = ResPages[OffsetCurrentPage].DeliveryDate;
+                ConTB.Text                   = ResPages[OffsetCurrentPage].ConsignmentNumber;
+                PostTB.Text                  = ResPages[OffsetCurrentPage].PostCode;
+                TelTB.Text                   = ResPages[OffsetCurrentPage].Telephone;
+                LocatTB.Text                 = ResPages[OffsetCurrentPage].Location;
+                LocatNoTB.Text               = ResPages[OffsetCurrentPage].LocationNumber;
+                ParcelTB.Text                = ResPages[OffsetCurrentPage].ParcelNumber;
 
-                if (CurrentPg == MaxPg)
+                if (CurrentPage == MaxPg)
                     Continue.Text = "Finish";
 
                 return;
@@ -235,57 +265,59 @@ namespace TS_Post_Database_Inserter
                 var idex = 0;
                 foreach (var c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
                 {
-                    ResPages[g].CheckStates[idex] = c.CheckState;
+                    ResPages[OffsetCurrentPage].CheckStates[idex] = c.CheckState;
                     idex++;
                 }
 
-                ResPages[g].IsViewed              = true;
+                ResPages[OffsetCurrentPage].IsViewed              = true;
+                ResPages[OffsetCurrentPage].CurrectCheckState = TickallCB.CheckState;
 
-                if (CurrentPg < MaxPg)
+                if (CurrentPage < MaxPg)
                 {
-                    CurrentPg++;
-                    g++;
+                    CurrentPage++;
+                    OffsetCurrentPage++;
+                    TickallCB.CheckState = ResPages[OffsetCurrentPage].CurrectCheckState;
 
-                    if (ResPages[g].IsViewed)
+                    if (ResPages[OffsetCurrentPage].IsViewed)
                     {
                         var index                 = 0;
                         foreach (var checkBox in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
                         {
-                            checkBox.CheckState   = ResPages[g].CheckStates[index];
+                            checkBox.CheckState   = ResPages[OffsetCurrentPage].CheckStates[index];
                             index++;
                         }
                     }
-                    else if (!ResPages[g].IsViewed)
+                    else if (!ResPages[OffsetCurrentPage].IsViewed)
                     {
                         foreach (var checkBox in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
                         {
                             checkBox.CheckState   = CheckState.Unchecked;
-                            ResPages[g].CheckStates.Add(checkBox.CheckState);
+                            ResPages[OffsetCurrentPage].CheckStates.Add(checkBox.CheckState);
                         }
                     }
 
                     //textfields
-                    NameTB.Text                   = ResPages[g].Name;
-                    tabControl1.SelectedTab.Text  = NameTB.Text + ", PDF page:" + CurrentPg;
-                    PgNumL.Text                   = "Page: " + CurrentPg;
-                    this.Text                     = NameTB.Text + ", PDF page:" + CurrentPg;
-                    AddressTB.Text                = ResPages[g].Address;
-                    BarTB.Text                    = ResPages[g].Barcode;
-                    DelTB.Text                    = ResPages[g].DeliveryDate;
-                    ConTB.Text                    = ResPages[g].ConsignmentNumber;
-                    PostTB.Text                   = ResPages[g].PostCode;
-                    TelTB.Text                    = ResPages[g].Telephone;
-                    LocatTB.Text                  = ResPages[g].Location;
-                    LocatNoTB.Text                = ResPages[g].LocationNumber;
-                    ParcelTB.Text                 = ResPages[g].ParcelNumber;
+                    NameTB.Text                   = ResPages[OffsetCurrentPage].Name;
+                    tabControl1.SelectedTab.Text  = NameTB.Text + ", PDF page:" + CurrentPage;
+                    PgNumL.Text                   = "Page: " + CurrentPage;
+                    this.Text                     = NameTB.Text + ", PDF page:" + CurrentPage;
+                    AddressTB.Text                = ResPages[OffsetCurrentPage].Address;
+                    BarTB.Text                    = ResPages[OffsetCurrentPage].Barcode;
+                    DelTB.Text                    = ResPages[OffsetCurrentPage].DeliveryDate;
+                    ConTB.Text                    = ResPages[OffsetCurrentPage].ConsignmentNumber;
+                    PostTB.Text                   = ResPages[OffsetCurrentPage].PostCode;
+                    TelTB.Text                    = ResPages[OffsetCurrentPage].Telephone;
+                    LocatTB.Text                  = ResPages[OffsetCurrentPage].Location;
+                    LocatNoTB.Text                = ResPages[OffsetCurrentPage].LocationNumber;
+                    ParcelTB.Text                 = ResPages[OffsetCurrentPage].ParcelNumber;
 
                     //end
-                    if (CurrentPg > 1) PrevBtn.Enabled = true;
+                    if (CurrentPage > 1) PrevBtn.Enabled = true;
 
-                    if (CurrentPg == MaxPg)
+                    if (CurrentPage == MaxPg)
                         Continue.Text = "Finish";
                 }
-                else if (CurrentPg == MaxPg)
+                else if (CurrentPage == MaxPg)
                 {
                     var checkStates          = new List<CheckState>();
                     var uncheckedNumber      = 0;
@@ -316,87 +348,56 @@ namespace TS_Post_Database_Inserter
                 var index                          = 0;
                 foreach (var checkBox in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
                 {
-                    ResPages[g].CheckStates[index] = checkBox.CheckState;
+                    ResPages[OffsetCurrentPage].CheckStates[index] = checkBox.CheckState;
                     index++;
                 }
 
-                ResPages[g].IsViewed               = true;
+                ResPages[OffsetCurrentPage].IsViewed               = true;
+                ResPages[OffsetCurrentPage].CurrectCheckState = TickallCB.CheckState;
 
-                CurrentPg--;
-                g                                  = CurrentPg - 1;
+                CurrentPage--;
+                OffsetCurrentPage                                  = CurrentPage - 1;
+                TickallCB.CheckState = ResPages[OffsetCurrentPage].CurrectCheckState;
 
-                if (ResPages[g].IsViewed)
+                if (ResPages[OffsetCurrentPage].IsViewed)
                 {
                     var i                          = 0;
                     foreach (var c in tabControl1.SelectedTab.Controls.OfType<CheckBox>())
                     {
-                        c.CheckState               = ResPages[g].CheckStates[i];
+                        c.CheckState               = ResPages[OffsetCurrentPage].CheckStates[i];
                         i++;
                     }
                 }
-                else if (!ResPages[g].IsViewed)
+                else if (!ResPages[OffsetCurrentPage].IsViewed)
                     foreach (var c in tabControl1.SelectedTab.Controls.OfType<CheckBox>().ToArray())
-                        ResPages[g].CheckStates.Add(c.CheckState);
+                        ResPages[OffsetCurrentPage].CheckStates.Add(c.CheckState);
 
-                if (CurrentPg + 1 > 1)
+                if (CurrentPage + 1 > 1)
                 {
-                    if (CurrentPg + 1              == MaxPg)
+                    if (CurrentPage + 1              == MaxPg)
                         Continue.Text              = "Next";
 
-                    NameTB.Text                    = ResPages[g].Name;
-                    tabControl1.SelectedTab.Text   = NameTB.Text + ", PDF page:" + CurrentPg;
-                    PgNumL.Text                    = "Page: " + CurrentPg;
-                    this.Text                      = NameTB.Text + ", PDF page:" + CurrentPg;
-                    AddressTB.Text                 = ResPages[g].Address;
-                    BarTB.Text                     = ResPages[g].Barcode;
-                    DelTB.Text                     = ResPages[g].DeliveryDate;
-                    ConTB.Text                     = ResPages[g].ConsignmentNumber;
-                    PostTB.Text                    = ResPages[g].PostCode;
-                    TelTB.Text                     = ResPages[g].Telephone;
-                    LocatTB.Text                   = ResPages[g].Location;
-                    LocatNoTB.Text                 = ResPages[g].LocationNumber;
-                    ParcelTB.Text                  = ResPages[g].ParcelNumber;
+                    NameTB.Text                    = ResPages[OffsetCurrentPage].Name;
+                    tabControl1.SelectedTab.Text   = NameTB.Text + ", PDF page:" + CurrentPage;
+                    PgNumL.Text                    = "Page: " + CurrentPage;
+                    this.Text                      = NameTB.Text + ", PDF page:" + CurrentPage;
+                    AddressTB.Text                 = ResPages[OffsetCurrentPage].Address;
+                    BarTB.Text                     = ResPages[OffsetCurrentPage].Barcode;
+                    DelTB.Text                     = ResPages[OffsetCurrentPage].DeliveryDate;
+                    ConTB.Text                     = ResPages[OffsetCurrentPage].ConsignmentNumber;
+                    PostTB.Text                    = ResPages[OffsetCurrentPage].PostCode;
+                    TelTB.Text                     = ResPages[OffsetCurrentPage].Telephone;
+                    LocatTB.Text                   = ResPages[OffsetCurrentPage].Location;
+                    LocatNoTB.Text                 = ResPages[OffsetCurrentPage].LocationNumber;
+                    ParcelTB.Text                  = ResPages[OffsetCurrentPage].ParcelNumber;
 
-                    if (CurrentPg                  == 1) PrevBtn.Enabled = false;
+                    if (CurrentPage                  == 1) PrevBtn.Enabled = false;
                 }
             }
         }
 
-
-        //events
-
-        private void Continue_Click(object sender, EventArgs e)
-        {
-            InfoUpdate(ChangePage.Next);
-        }
-
-        private void PrevBtn_Click(object sender, EventArgs e)
-        {
-            if (CurrentPg > 1) InfoUpdate(ChangePage.Previous);
-        }
-
-        private void Cancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
-        private void C_CheckStateChanged(object sender, EventArgs e)
-        {
-            CheckBox checkBox                      = null;
-            if (sender is CheckBox) checkBox       = (CheckBox) sender;
-
-            if (checkBox.BackColor == Color.Red)
-                checkBox.BackColor                 = Color.Transparent;
-            else if (checkBox.BackColor == Color.Transparent)
-                checkBox.BackColor                 = Color.Red;
-        }
-
-
-        //excel parts
-
         public XSSFWorkbook Workbook;
         public XSSFSheet WorkSheet;
-
         public void PushExcel(Completed completed)
         {
             //write to excel
@@ -420,7 +421,7 @@ namespace TS_Post_Database_Inserter
             var i = 0;
             foreach (var pages in ResPages)
             {
-                float Calculate = (160/ (float)ResPages.Count);
+                float Calculate = (160 / (float)ResPages.Count);
                 int math = (int)Math.Round(Calculate, 0, MidpointRounding.AwayFromZero);
                 completed.Progressbar.Increment(math);
 
@@ -429,10 +430,18 @@ namespace TS_Post_Database_Inserter
                 var propertyInfos = new List<PropertyInfo>();
                 if (i < ResPages.Count)
                     propertyInfos.AddRange(pages.GetType().GetProperties().Where(prop => prop.PropertyType == typeof(string) && prop.Name != "PDFtext"));
-                
+
                 var cellnum = 0;
                 foreach (var propertyInfo in propertyInfos)
                 {
+                    Console.WriteLine(cellnum);
+                    Console.WriteLine(propertyInfo.Name);
+                    Console.WriteLine(propertyInfo.GetValue(pages, null).ToString());
+                    Console.WriteLine(WorkSheet.GetRow(WorkSheet.FirstRowNum).GetCell(cellnum).StringCellValue);
+
+                    ///Excel Headers must be exactly the same as the varible names of the class Pages
+                    /// If they are not the same, an object reference error will be thrown
+
                     if (WorkSheet.GetRow(WorkSheet.FirstRowNum).GetCell(cellnum).StringCellValue == propertyInfo.Name)
                     {
                         WorkSheet.GetRow(NRow).CreateCell(cellnum);
@@ -450,10 +459,9 @@ namespace TS_Post_Database_Inserter
                 try
                 {
                     Workbook.Write(fileStream);
-                    fileStream.Close();
                     completed.Progressbar.Increment(60);
                 }
-                catch (Exception )
+                catch (Exception)
                 {
                     completed.Progressbar.Increment(-60);
                     completed.Progressbar.ForeColor = Color.Red;
@@ -462,18 +470,35 @@ namespace TS_Post_Database_Inserter
             }
         }
 
-        protected void AppendExcel()
+
+
+
+        //Events
+
+        private void Continue_Click(object sender, EventArgs e)
         {
-            //if(start.)
+            InfoUpdate(ChangePage.Next);
         }
 
-
-
-        //empty
-
-        private void CustInfo_FormClosing(object sender, FormClosingEventArgs e)
+        private void PrevBtn_Click(object sender, EventArgs e)
         {
-            //empty
+            if (CurrentPage > 1) InfoUpdate(ChangePage.Previous);
+        }
+
+        private void Cancel_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void C_CheckStateChanged(object sender, EventArgs e)
+        {
+            CheckBox checkBox                      = null;
+            if (sender is CheckBox) checkBox       = (CheckBox) sender;
+
+            if (checkBox.BackColor == Color.Red)
+                checkBox.BackColor                 = Color.Transparent;
+            else if (checkBox.BackColor == Color.Transparent)
+                checkBox.BackColor                 = Color.Red;
         }
 
         private void TickallCB_CheckedChanged(object sender, EventArgs e)
@@ -487,9 +512,16 @@ namespace TS_Post_Database_Inserter
             else if (TickallCB.CheckState == CheckState.Indeterminate)
                 TickallCB.CheckState = CheckState.Unchecked;
         }
+
+        private void CustInfo_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //empty
+        }
+
     }
 
     [Serializable]
+    [LinesOfCodeAvoided(9)]
     public class ExceptionWrapper : OnExceptionAspect
     {
         public override void OnException(MethodExecutionArgs args)
@@ -498,7 +530,7 @@ namespace TS_Post_Database_Inserter
             base.OnException(args);
             Console.WriteLine(ex);
             var logger = LogManager.GetCurrentClassLogger();
-            logger.ErrorException(ex.ToString(), ex);
+            logger.Error(ex, ex.ToString());
             Console.WriteLine("check code");
         }
     }
@@ -517,8 +549,6 @@ namespace TS_Post_Database_Inserter
         }
     }
 
-
-
     public class Pages
     {
         public string PDFtext { get; set; }
@@ -533,8 +563,11 @@ namespace TS_Post_Database_Inserter
         public string Location { get; set; }
         public string LocationNumber { get; set; }
         public string ParcelNumber { get; set; }
+        public string ParcelSize { get; set; }
+        public string Weight { get; set; }
         public List<CheckState> CheckStates = new List<CheckState>();
         public bool IsViewed { get; set; }
+        public CheckState CurrectCheckState { get; set; }
     }
 
 
