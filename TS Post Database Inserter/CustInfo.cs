@@ -57,7 +57,7 @@ namespace TS_Post_Database_Inserter
             OpenPDF = Config.AppSettings.Settings["OpenPDF"].Value;
 
 
-            reader = new PdfReader(start.OpenPDF);
+            reader = new PdfReader(start._SourcePDFFile);
             MaxPg = reader.NumberOfPages;
             CurrentPage = 0;
 
@@ -404,7 +404,7 @@ namespace TS_Post_Database_Inserter
             completed.Progressbar.PerformStep();
             try
             {
-                Filestream = new FileStream(start.MainExcel, FileMode.Open, FileAccess.ReadWrite);
+                Filestream = new FileStream(start._MainExcelFile, FileMode.Open, FileAccess.ReadWrite);
                 Workbook = new XSSFWorkbook(Filestream);
                 WorkSheet = Workbook.GetSheetAt(0) as XSSFSheet;
             }
@@ -454,7 +454,7 @@ namespace TS_Post_Database_Inserter
 
 
             completed.Progressbar.PerformStep();
-            using (var fileStream = new FileStream(start.MainExcel, FileMode.Create, FileAccess.Write))
+            using (var fileStream = new FileStream(start._MainExcelFile, FileMode.Create, FileAccess.Write))
             {
                 try
                 {

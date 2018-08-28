@@ -121,9 +121,6 @@
   <data name="icon_lPk_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\icon_lPk_icon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SourceExcel" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SourceExcel.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="Label" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Label.lbx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -132,5 +129,11 @@
   </data>
   <data name="TS_Inserter_Manual_PDF" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TS Inserter Manual PDF.pdf;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Main" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\main.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Master" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\master.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>

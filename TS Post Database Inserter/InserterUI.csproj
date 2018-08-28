@@ -155,6 +155,11 @@
     <Compile Include="MECheck.Designer.cs">
       <DependentUpon>MECheck.cs</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Start.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -185,14 +190,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Content Include="icon_lPk_icon.ico" />
     <Content Include="NLog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -207,9 +207,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\Books1.xlsx" />
-    <None Include="Resources\Label.lbx" />
-    <None Include="Resources\SourceExcel.xlsx" />
+    <EmbeddedResource Include="Resources\Label.lbx" />
+    <EmbeddedResource Include="Resources\Main.xlsx" />
+    <EmbeddedResource Include="Resources\Master.xlsx" />
     <None Include="Resources\TS Inserter Manual DOCX.docx" />
     <None Include="Resources\TS Inserter Manual PDF.pdf" />
     <None Include="Resources\TS Inserter Manual.docx" />

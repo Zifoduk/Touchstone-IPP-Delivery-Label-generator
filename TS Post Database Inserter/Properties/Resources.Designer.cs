@@ -83,9 +83,19 @@ namespace TS_Post_Database_Inserter.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
-        public static byte[] SourceExcel {
+        public static byte[] Main {
             get {
-                object obj = ResourceManager.GetObject("SourceExcel", resourceCulture);
+                object obj = ResourceManager.GetObject("Main", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] Master {
+            get {
+                object obj = ResourceManager.GetObject("Master", resourceCulture);
                 return ((byte[])(obj));
             }
         }

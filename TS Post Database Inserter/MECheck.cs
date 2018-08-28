@@ -30,7 +30,7 @@ namespace TS_Post_Database_Inserter
 
         private void YesBTN_Click(object sender, EventArgs e)
         {
-            st.Folder = FName;
+            st.RootFolder = FName;
 
             MEC Mec = new MEC();
             Mec.ShowDialog();
